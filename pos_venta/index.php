@@ -17,7 +17,7 @@
             $metodo = $array[1];
         }
     }
-    
+
     //validamos si exite el parametro
     if (!empty($array[2])) {
     	//validamos que el campo sea diferente de vacio
@@ -31,7 +31,12 @@
             $parametro = trim($parametro, ",");
         }
     }
-//Ruta de los controladores
+
+	//Requerimos el dir
+	require_once 'Config/App/autoload.php';
+
+
+	//Ruta de los controladores
     // validaciones para indicarle la ruta donde se encuentran los controladores, luego hacer la instancia de la clase
 
     $dirControllers = "Controllers/" . $controller . ".php";
