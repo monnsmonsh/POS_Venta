@@ -1,6 +1,6 @@
 <?php
     //
-require_once "Config/Config.php";
+    require_once "Config/Config.php";
 
 	//creamos la ruta
     $ruta = !empty($_GET['url']) ? $_GET['url'] : "Home/index";
