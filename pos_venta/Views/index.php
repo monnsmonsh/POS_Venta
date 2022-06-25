@@ -20,17 +20,29 @@
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">Iniciar Seccion</h3></div>
                                     <div class="card-body">
-                                        <form>
+
+                                        <form id="frmLogin">
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" id="inputEmail" type="text" placeholder="Ingrese Usuario" />
-                                                <label for="inputEmail"><i class="fas fa-user"></i>Usuario</label>
+                                                <input class="form-control" id="usuario" type="text" name="usuario" placeholder="Ingrese Usuario" />
+                                                <label for="usuario"><i class="fas fa-user"></i>Usuario</label>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" id="inputPassword" type="password" placeholder="Ingrese contraseña" />
-                                                <label for="inputPassword"><i class="fas fa-key"></i>Contraseña</label>
+                                                <input class="form-control" id="clave" name="clave" type="password"  placeholder="Ingrese contraseña" />
+                                                <label for="clave"><i class="fas fa-key"></i>Contraseña</label>
                                             </div>
+
+                                            <!--//msg de erro de usuario y/o clave-->
+                                            <div class="alert alert-danger text-center d-none" role="alert" id="alerta">
+                                                
+                                            </div>
+
                                           
-                                           
+                                           <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                                                
+
+                                                <button class="btn btn-primary" type="submit" onclick="frmLogin(event);">Login</button>
+
+                                            </div>
                                         </form>
                                     </div>
                                     <div class="card-footer text-center py-3">
@@ -59,5 +71,12 @@
         </div>
         <script src="<?php echo base_url; ?>Assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="<?php echo base_url; ?>Assets/js/scripts.js"></script>
+
+        <script>
+            const base_url = "<?php echo base_url; ?>";
+        </script>
+        
+
+        <script src="<?php echo base_url; ?>Assets/js/funciones.js"></script>
     </body>
 </html>
