@@ -16,9 +16,37 @@ class Usuarios extends Controller
 		//accedemos a la accion getUsuario
 		//print_r($this->model->getUsuario());
 
+		//llamamos a un metodo dentro usuariomodel getCajas
+		$data['cajas'] = $this->model->getCajas();
+
 		//mostramos la VISTA
-		$this->views->getView($this, "index");
+		$this->views->getView($this, "index", $data);
 	}
+
+    //llamamos al metodo getUsuarios
+	public function listar()
+	{
+		
+		$data = ($this->model->getUsuarios());
+		//generamos los botones de editar y eliminar
+		for($i=0; $i< count($data); $i++){
+			//valdiacion de estado de usuario
+			if ($data[$i]['estado'] == 1) {
+                $data[$i]['estado'] = '<span class="badge bg-success">Activo</span>';
+            }else{
+            	$data[$i]['estado'] = '<span class="badge bg-danger">Inactivo</span>';
+            }
+
+             
+			$data[$i]['acciones'] = '<div>
+                <button class="btn btn-primary" type="button"> Editar</button>
+                <button class="btn btn-danger" type="button">Eliminar</button>
+                <div/>';
+		}
+		echo json_encode($data,JSON_UNESCAPED_UNICODE);
+		die();
+	}
+
 
 	public function validar()
 	{
