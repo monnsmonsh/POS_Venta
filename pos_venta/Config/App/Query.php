@@ -1,6 +1,6 @@
 <?php
 class Query extends Conexion{
-	private $pdo, $con, $sql;
+	private $pdo, $con, $sql, $datos;
 
 	public function __construct(){
 		$this->pdo = new Conexion();
@@ -22,6 +22,23 @@ class Query extends Conexion{
 		$resul->execute();
 		$data= $resul->fetchall(PDO::FETCH_ASSOC);
 		return $data;
+	}
+
+	//recibimos los metodo registrarUsuario del modelo
+	public function save(string $sql, array $datos)
+    {
+        $this->sql = $sql;
+        $this->datos = $datos;
+        $insert = $this->con->prepare($this->sql);
+        $data = $insert->execute($this->datos);
+        if ($data) {
+            $res = 1;
+        }else{
+            $res = 0;
+        }
+        return $res;
+
+
 	}
 }
 ?>

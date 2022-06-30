@@ -70,3 +70,70 @@ function frmUsuario(){
 	$("#nuevo_usuario").modal("show");
 }
 
+//registra usuario
+function registarUser(e){
+	e.preventDefault();
+	const usuario = document.getElementById("usuario");
+	const nombre = document.getElementById("nombre");
+	const clave = document.getElementById("clave");
+	const confirmar = document.getElementById("confirmar");
+	const caja = document.getElementById("caja");
+
+	//realizamos validacions y verificamos:
+	if(usuario.value == "" || nombre.value == "" || clave.value == "" || caja.value == ""){
+		//mostramos alerta con sweetalert2
+		Swal.fire({
+		  	position: 'top-center',
+		  	icon: 'error',
+		  	title: 'Todos los campos son obligatorios',
+		  	showConfirmButton: false,
+		  	timer: 2000
+		})	
+	}
+	//realizamos validacion y de que las contraseñas coincidan
+	else if(clave.value != confirmar.value){
+		Swal.fire({
+		  	position: 'top-center',
+		  	icon: 'error',
+		  	title: 'Las contraseñas no coinciden',
+		  	showConfirmButton: false,
+		  	timer: 2000
+		})
+	}
+	else{
+		const url = base_url + "Usuarios/registrar";
+		const frm = document.getElementById("frmUsuario");
+		const http = new XMLHttpRequest();
+		http.open("POST", url, true);
+		http.send(new FormData(frm));
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				const res= JSON.parse(this.responseText);
+				if (res =="si"){
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'success',
+					  	title: 'Usuario registrado con exito',
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+					//reseteamos frm
+					frm.reset();
+					//oculdamo el modal
+					$('#nuevo_usuario').modal("hide");
+
+				}else{
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'error',
+					  	title: res,
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+				}
+			} 
+		}
+	}
+}
+

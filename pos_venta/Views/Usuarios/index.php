@@ -34,59 +34,60 @@
 	<div id="nuevo_usuario" class="modal" tabindex="-1">
 		<div class="modal-dialog">
 		    <div class="modal-content">
-		    	<form method="post" id="frmUsuarios">
-			      	<div class="modal-header">
-			        	<h5 class="modal-title">Nuevo Usuario</h5>
-			        	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			      	</div>
-			      	<div class="modal-body">
-			        	<!--<form method="post" id="frmUsuarios">-->
-			        		<div class="mb-3">
-						    	<label for="usuario" class="form-label">Usuario</label>
-						    	<input id="usuario" type="text" class="form-control" type="text" name="usuario"  placeholder="usuario">
-						  	</div>
-						  	<div class="mb-3">
-						    	<label for="nombre" class="form-label">Nombre</label>
-						    	<input id="nombre" type="text" class="form-control" type="text" name="nombre"  placeholder="nombre">
-						  	</div>
-						  	<div class="row">
-						  		<div class="col-md-6">
-						  			<div class="mb-3">
-								    	<label for="clave" class="form-label">Contraseña</label>
-								    	<input id="clave" type="text" class="form-control" type="password" name="clave"  placeholder="contraseña">
-								  	</div>
-						  		</div>
-						  		<div class="col-md-6">
-								  	<div class="mb-3">
-								    	<label for="confirmar" class="form-label">Confirmar Contraseña</label>
-								    	<input id="confirmar" type="text" class="form-control" type="password" name="confirmar"  placeholder="confirmar contraseña">
-								  	</div>
-						  		</div>
-						  		
-						  	</div>
-						  	<div class="mb-3">
-						    	<label for="caja" class="form-label">Caja</label>
-						    	<select class="form-select" aria-label="Default select example">
+		    	<form method="post" id="frmUsuario">
+				    <div class="modal-header">
+				        <h5 class="modal-title">Modal title</h5>
+				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				    </div>
+				    <div class="modal-body">
+				        <!--<form method="post" id="frmUsuarios">-->
+		                <div class="mb-3">
+		                  	<label for="usuario" class="form-label">Usuario</label>
+		                  	<input id="usuario" type="text" class="form-control" type="text" name="usuario"  placeholder="usuario">
+		                </div>
+		                <div class="mb-3">
+		                  	<label for="nombre" class="form-label">Nombre</label>
+		                  	<input id="nombre" type="text" class="form-control" type="text" name="nombre"  placeholder="nombre">
+		                </div>
+		                <div class="row">
+			                <div class="col-md-6">
+			                    <div class="mb-3">
+			                      <label for="clave" class="form-label">Contraseña</label>
+			                      <input id="clave" type="password" class="form-control" name="clave"  placeholder="contraseña">
+			                    </div>
+			                </div>
+			                <div class="col-md-6">
+			                	<div class="mb-3">
+			                      	<label for="confirmar" class="form-label">Confirmar Contraseña</label>
+			                      	<input id="confirmar" type="password" class="form-control" name="confirmar"  placeholder="confirmar contraseña">
+			                    </div>
+			                </div>
+		                </div>
 
-								  	<option selected>Selecciona una caja</option>
-								  	<?php foreach($data['cajas'] as $row){?>
-								  		<option ><?php echo $row['caja'];?></option>
-								  	
-								  	<?php } ?>
-								  	
-						  	</div>
-						  	<button class="btn btn-primary mb-2" type="submit">Registrar</button>
+		               	<div class="mb-3">
+	                  		<label for="caja" class="form-label">Caja</label>
+	                  		<select id ="caja" name="caja" class="form-select" >
 
-			        	
-			        	<!--</form>-->
-			      	</div>
-			      	<div class="modal-footer">
+	                    		<option selected>Selecciona una caja</option>
+	                    		<?php foreach ($data['cajas'] as $row) { ?>
+	                      		<option value="<?php echo $row['id']; ?>"><?php echo $row['caja']; ?></option>
+	                    
+	                    	<?php } ?>
+	                    	</select>
+	                	</div>
+	                	<!--<button class="btn btn-primary mb-2" type="submit">Registrar</button>-->
+			            <!--</form>-->       
+			            
+		                
+				    </div>
+				    <div class="modal-footer">
 				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				        <button type="button" class="btn btn-primary">Save changes</button>
-			      	</div>
-		      	</form>
+				        <button type="button" class="btn btn-primary" onclick="registarUser(event);">Registrar</button>
+				    </div>
+				</form>
 		    </div>
 		</div>
 	</div>
+
 <?php include "Views/Templates/footer.php"; ?>
 

@@ -26,7 +26,6 @@ class Usuarios extends Controller
     //llamamos al metodo getUsuarios
 	public function listar()
 	{
-		
 		$data = ($this->model->getUsuarios());
 		//generamos los botones de editar y eliminar
 		for($i=0; $i< count($data); $i++){
@@ -77,6 +76,40 @@ class Usuarios extends Controller
 		//para la "ñ" utilizamos JSON_UNESCAPED_UNICODE
 		echo json_encode($msg, JSON_UNESCAPED_UNICODE);
         die();
+	}
+
+	public function registrar(){
+		//print_r($_POST);
+
+		//validamos datos
+		$usuario = $_POST['usuario'];
+		$nombre = $_POST['nombre'];
+		$clave = $_POST['clave'];
+		$confirmar = $_POST['confirmar'];
+		$caja =$_POST['caja'];
+
+		if(empty ($usuario) || empty ($nombre) || empty ($clave) || empty ($caja)){
+			//
+			$msg = "todos los campos son obligatorio";
+
+		//realizamos validacion y de que las contraseñas coincidan
+		}else if($clave != $confirmar){
+			$msg = "las contraseñas no coinciden";
+		}else{
+			// con parametro 4
+			$data = $this->model->registrarUsuario($usuario, $nombre, $clave, $caja);
+			//verificamos la respusta caja
+			if($data == "ok"){
+				//$msg = "usuario registrar con exito";
+				//cambiamos msg para realziar una validacion
+				$msg = "si";
+			}else{
+				$msg = "Error al registrar al usuario";
+			}
+		}
+		echo json_encode($msg, JSON_UNESCAPED_UNICODE);
+		die();
+
 	}
 }
 
