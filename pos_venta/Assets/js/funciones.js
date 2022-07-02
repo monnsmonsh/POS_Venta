@@ -68,8 +68,8 @@ function frmLogin(e){
 //crear usuario
 function frmUsuario(){
 	//accedemos al titulo de la ventana modal para cambiar el  titulo y el btn
-	document.getElementById("title").innerHTML ="Nuevo Usuario"
-	document.getElementById("btnAccion").innerHTML ="Registrar"
+	document.getElementById("title").innerHTML ="Nuevo Usuario";
+	document.getElementById("btnAccion").innerHTML ="Registrar";
 	//muestra los input de las claves
 	document.getElementById("claves").classList.remove("d-none");
 	//reseteamos el frm
@@ -253,6 +253,234 @@ function btnReingresarUser(id){
 				      'success'
 				    )
 					tblUsuarios.ajax.reload();
+				}else{
+					Swal.fire(
+				      'Mensaje!',
+				      res,
+				      'error'
+				    )
+				}
+			} 
+		}
+
+	    
+	  }
+	})
+}
+
+//
+//Fin usuarios
+
+
+
+//
+//Inicio de Cliente cleintes
+//
+//recibimos la lista de clientes
+let tblClientes;
+document.addEventListener("DOMContentLoaded", function(){
+	tblClientes = $('#tblClientes').DataTable({
+        ajax: {
+            url: base_url + "Clientes/listar",
+            dataSrc: ''
+        },
+        columns: [
+        	{'data' : 'id'},
+        	{'data' : 'dni'},
+        	{'data' : 'nombre'},
+            {'data' : 'telefono'},
+           	{'data' : 'direccion'},
+           	//generamos un obj para estado
+            {'data' : 'estado'},
+           	//generamos un obj para las acciones
+            {'data' : 'acciones'}
+
+	    ]
+	});
+})
+//crear cliente
+function frmCliente(){
+	//accedemos al titulo de la ventana modal para cambiar el  titulo y el btn
+	document.getElementById("title").innerHTML = "Nuevo Cliente";
+	document.getElementById("btnAccion").innerHTML = "Registrar";
+	//reseteamos el frm
+	document.getElementById("frmCliente").reset();
+
+	$("#nuevo_cliente").modal("show");
+
+	document.getElementById("id").value ="";
+}
+
+function registarCli(e){
+	e.preventDefault();
+	const dni = document.getElementById("dni");
+	const nombre = document.getElementById("nombre");
+	const telefono = document.getElementById("telefono");
+	const direccion = document.getElementById("direccion");
+
+	//realizamos validacions y verificamos:
+	if(dni.value == "" || nombre.value == "" || telefono.value == "" || direccion.value == ""){
+		//mostramos alerta con sweetalert2
+		Swal.fire({
+		  	position: 'top-center',
+		  	icon: 'error',
+		  	title: 'Todos los campos son obligatorios',
+		  	showConfirmButton: false,
+		  	timer: 2000
+		})	
+	}else{
+		const url = base_url + "Clientes/registrar";
+		const frm = document.getElementById("frmCliente");
+		const http = new XMLHttpRequest();
+		http.open("POST", url, true);
+		http.send(new FormData(frm));
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				const res= JSON.parse(this.responseText);
+				if (res =="si"){
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'success',
+					  	title: 'Cliente registrado con exito',
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+					//reseteamos frm
+					frm.reset();
+					//oculdamo el modal
+					$('#nuevo_cliente').modal("hide");
+					//recargamos la tbl
+					tblClientes.ajax.reload();
+				}
+				//si el usuario es modificado
+				else if(res == "modificado"){
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'success',
+					  	title: 'Cliente modificado con exito',
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+					$('#nuevo_cliente').modal("hide")
+					tblClientes.ajax.reload();
+				}else{
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'error',
+					  	title: res,
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+				}
+			} 
+		}
+	}
+}
+
+//editar cliente
+function btnEditarCli(id){
+	//accedemos al titulo de la ventana modal para cambiar el tituloy el btn
+	document.getElementById("title").innerHTML ="Actualizar Cliente"
+	document.getElementById("btnAccion").innerHTML ="Modifcar"
+
+	//obtenemos los datos para editar
+	const url = base_url + "Clientes/editar/"+id;
+	const http = new XMLHttpRequest();
+	http.open("GET", url, true);
+	http.send();
+	http.onreadystatechange = function(){
+		if (this.readyState == 4 && this.status == 200){
+			//console.log(this.responseText); 
+			const res = JSON.parse(this.responseText);
+			document.getElementById("id").value = res.id;
+			//accedemos a los datos a editar
+			document.getElementById("dni").value = res.dni;
+			document.getElementById("nombre").value = res.nombre;
+			document.getElementById("telefono").value = res.telefono;
+			document.getElementById("direccion").value = res.direccion;
+			$("#nuevo_cliente").modal("show");
+		} 
+	}	
+}
+//eliminar cliente
+function btnEliminarCli(id){
+	//alert(id);
+	Swal.fire({
+	  	title: '¿Estas seguro de eliminar?',
+	  	text: "El cliente no se eliminara de forma permanete, solo cambiara el estado a inactivo",
+	  	icon: 'warning',
+	  	showCancelButton: true,
+	  	confirmButtonColor: '#3085d6',
+	  	cancelButtonColor: '#d33',
+	  	confirmButtonText: 'SI',
+	  	cancelButtonText: 'NO'
+	}).then((result) => {
+	  if (result.isConfirmed) {
+	  	//enviamos el id
+
+		//obtenemos los datos para editar
+		const url = base_url + "Clientes/eliminar/"+id;
+		const http = new XMLHttpRequest();
+		http.open("GET", url, true);
+		http.send();
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				const res = JSON.parse(this.responseText);
+				if (res == "ok") {
+					Swal.fire(
+				      'Mensaje!',
+				      'Cliente eliminado con exito.',
+				      'success'
+				    )
+					tblClientes.ajax.reload();
+				}else{
+					Swal.fire(
+				      'Mensaje!',
+				      res,
+				      'error'
+				    )
+				}
+			} 
+		}
+
+	    
+	  }
+	})
+}
+
+//Reingresar cliente
+function btnReingresarCli(id){
+	//alert(id);
+	Swal.fire({
+	  	title: '¿Estas seguro de reingresar?',
+	  	icon: 'warning',
+	  	showCancelButton: true,
+	  	confirmButtonColor: '#3085d6',
+	  	cancelButtonColor: '#d33',
+	  	confirmButtonText: 'SI',
+	  	cancelButtonText: 'NO'
+	}).then((result) => {
+	  if (result.isConfirmed) {
+	  	//enviamos el id
+
+		//obtenemos los datos para editar
+		const url = base_url + "Clientes/reingresar/"+id;
+		const http = new XMLHttpRequest();
+		http.open("GET", url, true);
+		http.send();
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				const res = JSON.parse(this.responseText);
+				if (res == "ok") {
+					Swal.fire(
+				      'Mensaje!',
+				      'Cliente reigresado con exito.',
+				      'success'
+				    )
+					tblClientes.ajax.reload();
 				}else{
 					Swal.fire(
 				      'Mensaje!',

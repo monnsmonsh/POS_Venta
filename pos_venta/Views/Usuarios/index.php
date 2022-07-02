@@ -5,8 +5,6 @@
     </ol>
 
     <button class="btn btn-primary mb-2" type="submit" onclick="frmUsuario();"><i class="fas fa-plus"></i></button>
-
-
 		
 	<div class="card mb-4">
         <div class="card-header">
