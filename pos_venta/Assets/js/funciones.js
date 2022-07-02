@@ -273,6 +273,9 @@ function btnReingresarUser(id){
 
 
 
+
+
+
 //
 //Inicio de Cliente cleintes
 //
@@ -481,6 +484,227 @@ function btnReingresarCli(id){
 				      'success'
 				    )
 					tblClientes.ajax.reload();
+				}else{
+					Swal.fire(
+				      'Mensaje!',
+				      res,
+				      'error'
+				    )
+				}
+			} 
+		}
+
+	    
+	  }
+	})
+}
+//
+//
+//Fin Clientes
+
+
+//
+//Inicio de Medidas
+//
+//recibimos la lista de medidas
+let tblMedidas;
+document.addEventListener("DOMContentLoaded", function(){
+	tblMedidas = $('#tblMedidas').DataTable({
+        ajax: {
+            url: base_url + "Medidas/listar",
+            dataSrc: ''
+        },
+        columns: [
+        	{'data' : 'id'},
+        	{'data' : 'nombre'},
+            {'data' : 'nombre_corto'},
+           	//generamos un obj para estado
+            {'data' : 'estado'},
+           	//generamos un obj para las acciones
+            {'data' : 'acciones'}
+
+	    ]
+	});
+})
+//crear medida
+function frmMedida(){
+	//accedemos al titulo de la ventana modal para cambiar el  titulo y el btn
+	document.getElementById("title").innerHTML = "Nueva Medida";
+	document.getElementById("btnAccion").innerHTML = "Registrar";
+	//reseteamos el frm
+	document.getElementById("frmMedida").reset();
+
+	$("#nueva_medida").modal("show");
+
+	document.getElementById("id").value ="";
+}
+
+function registarMed(e){
+	e.preventDefault();
+	const nombre = document.getElementById("nombre");
+	const nombre_corto = document.getElementById("nombre_corto");
+
+	//realizamos validacions y verificamos:
+	if(nombre.value == "" || nombre_corto.value == ""){
+		//mostramos alerta con sweetalert2
+		Swal.fire({
+		  	position: 'top-center',
+		  	icon: 'error',
+		  	title: 'Todos los campos son obligatorios',
+		  	showConfirmButton: false,
+		  	timer: 2000
+		})	
+	}else{
+		const url = base_url + "Medidas/registrar";
+		const frm = document.getElementById("frmMedida");
+		const http = new XMLHttpRequest();
+		http.open("POST", url, true);
+		http.send(new FormData(frm));
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				const res= JSON.parse(this.responseText);
+				if (res =="si"){
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'success',
+					  	title: 'Media registrado con exito',
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+					//reseteamos frm
+					frm.reset();
+					//oculdamo el modal
+					$('#nueva_medida').modal("hide");
+					//recargamos la tbl
+					tblMedidas.ajax.reload();
+				}
+				//si el medida es modificado
+				else if(res == "modificado"){
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'success',
+					  	title: 'Medida modificado con exito',
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+					$('#nueva_medida').modal("hide")
+					tblMedidas.ajax.reload();
+				}else{
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'error',
+					  	title: res,
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+				}
+			} 
+		}
+	}
+}
+
+//editar medida
+function btnEditarMed(id){
+	//accedemos al titulo de la ventana modal para cambiar el tituloy el btn
+	document.getElementById("title").innerHTML ="Actualizar Medida"
+	document.getElementById("btnAccion").innerHTML ="Modifcar"
+
+	//obtenemos los datos para editar
+	const url = base_url + "Medidas/editar/"+id;
+	const http = new XMLHttpRequest();
+	http.open("GET", url, true);
+	http.send();
+	http.onreadystatechange = function(){
+		if (this.readyState == 4 && this.status == 200){
+			//console.log(this.responseText); 
+			const res = JSON.parse(this.responseText);
+			document.getElementById("id").value = res.id;
+			//accedemos a los datos a editar
+			document.getElementById("nombre").value = res.nombre;
+			document.getElementById("nombre_corto").value = res.nombre_corto;
+			$("#nueva_medida").modal("show");
+		} 
+	}	
+}
+//eliminar medida
+function btnEliminarMed(id){
+	//alert(id);
+	Swal.fire({
+	  	title: '¿Estas seguro de eliminar?',
+	  	text: "La Medida no se eliminara de forma permanete, solo cambiara el estado a inactivo",
+	  	icon: 'warning',
+	  	showCancelButton: true,
+	  	confirmButtonColor: '#3085d6',
+	  	cancelButtonColor: '#d33',
+	  	confirmButtonText: 'SI',
+	  	cancelButtonText: 'NO'
+	}).then((result) => {
+	  if (result.isConfirmed) {
+	  	//enviamos el id
+
+		//obtenemos los datos para editar
+		const url = base_url + "Medidas/eliminar/"+id;
+		const http = new XMLHttpRequest();
+		http.open("GET", url, true);
+		http.send();
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				const res = JSON.parse(this.responseText);
+				if (res == "ok") {
+					Swal.fire(
+				      'Mensaje!',
+				      'Medida eliminado con exito.',
+				      'success'
+				    )
+					tblMedidas.ajax.reload();
+				}else{
+					Swal.fire(
+				      'Mensaje!',
+				      res,
+				      'error'
+				    )
+				}
+			} 
+		}
+
+	    
+	  }
+	})
+}
+
+//Reingresar media
+function btnReingresarMed(id){
+	//alert(id);
+	Swal.fire({
+	  	title: '¿Estas seguro de reingresar?',
+	  	icon: 'warning',
+	  	showCancelButton: true,
+	  	confirmButtonColor: '#3085d6',
+	  	cancelButtonColor: '#d33',
+	  	confirmButtonText: 'SI',
+	  	cancelButtonText: 'NO'
+	}).then((result) => {
+	  if (result.isConfirmed) {
+	  	//enviamos el id
+
+		//obtenemos los datos para editar
+		const url = base_url + "Medidas/reingresar/"+id;
+		const http = new XMLHttpRequest();
+		http.open("GET", url, true);
+		http.send();
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				const res = JSON.parse(this.responseText);
+				if (res == "ok") {
+					Swal.fire(
+				      'Mensaje!',
+				      'Medida reigresado con exito.',
+				      'success'
+				    )
+					tblMedidas.ajax.reload();
 				}else{
 					Swal.fire(
 				      'Mensaje!',

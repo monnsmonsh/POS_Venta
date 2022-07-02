@@ -69,6 +69,14 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                 Clientes
                             </a>
+                            <a class="nav-link" href="<?php echo base_url; ?>Medidas">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-scale-unbalanced"></i></div>
+                                Medidas
+                            </a>
+                            <a class="nav-link" href="<?php echo base_url; ?>Categorias">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                                Categorias
+                            </a>
                             <!-- -->
                           
                         </div>
