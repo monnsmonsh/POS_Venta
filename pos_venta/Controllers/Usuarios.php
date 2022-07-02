@@ -38,7 +38,7 @@ class Usuarios extends Controller
 
              
 			$data[$i]['acciones'] = '<div>
-                <button class="btn btn-primary" type="button"> Editar</button>
+                <button class="btn btn-primary" type="button" onclick="btnEditarUser('.$data[$i]['id'].');"> Editar</button>
                 <button class="btn btn-danger" type="button">Eliminar</button>
                 <div/>';
 		}
@@ -88,29 +88,61 @@ class Usuarios extends Controller
 		$confirmar = $_POST['confirmar'];
 		$caja =$_POST['caja'];
 
-		if(empty ($usuario) || empty ($nombre) || empty ($clave) || empty ($caja)){
+		$id =$_POST['id'];
+		//emcriptamos
+		$hash = hash("SHA256", $clave);
+
+		if(empty ($usuario) || empty ($nombre) || empty ($caja)){
 			//
 			$msg = "todos los campos son obligatorio";
 
-		//realizamos validacion y de que las contraseñas coincidan
-		}else if($clave != $confirmar){
-			$msg = "las contraseñas no coinciden";
 		}else{
-			// con parametro 4
-			$data = $this->model->registrarUsuario($usuario, $nombre, $clave, $caja);
-			//verificamos la respusta caja
-			if($data == "ok"){
-				//$msg = "usuario registrar con exito";
-				//cambiamos msg para realziar una validacion
-				$msg = "si";
+			//si es un nuevo registro lo registramos
+			if($id == ""){
+				//realizamos validacion y de que las contraseñas coincidan
+				if($clave != $confirmar){
+					$msg = "las contraseñas no coinciden";
+				}else{
+					// con parametro 4
+					$data = $this->model->registrarUsuario($usuario, $nombre, $hash, $caja);
+					//verificamos la respusta caja
+					if($data == "ok"){
+						//$msg = "usuario registrar con exito";
+						//cambiamos msg para realziar una validacion
+						$msg = "si";
+					}else if($data == "exite"){
+						$msg = "¡¡Error!! El usuario ya existe";
+					}else{
+						$msg ="error al aregistrar el usuario";
+					}
+				}
 			}else{
-				$msg = "Error al registrar al usuario";
+				$data = $this->model->modificarUsuario($usuario, $nombre, $caja, $id);
+					//verificamos la respusta caja
+					if($data == "modificado"){
+						//$msg = "usuario modificado con exito";
+						//cambiamos msg para realziar una validacion
+						$msg = "modificado";
+					}else{
+						$msg ="Error al modificar el usuario";
+					}
+
 			}
+			
 		}
 		echo json_encode($msg, JSON_UNESCAPED_UNICODE);
 		die();
 
 	}
+
+	public function editar(int $id)
+	{
+		$data = $this->model->editarUsuario($id);
+		echo json_encode($data, JSON_UNESCAPED_UNICODE);
+		die();
+	}
+
+
 }
 
 ?>

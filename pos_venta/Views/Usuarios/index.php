@@ -36,20 +36,21 @@
 		    <div class="modal-content">
 		    	<form method="post" id="frmUsuario">
 				    <div class="modal-header">
-				        <h5 class="modal-title">Modal title</h5>
+				        <h5 class="modal-title" id="title">Nuevo Usuario</h5>
 				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				    </div>
 				    <div class="modal-body">
 				        <!--<form method="post" id="frmUsuarios">-->
 		                <div class="mb-3">
 		                  	<label for="usuario" class="form-label">Usuario</label>
+		                  	<input type="hidden" id="id" name="id">
 		                  	<input id="usuario" type="text" class="form-control" type="text" name="usuario"  placeholder="usuario">
 		                </div>
 		                <div class="mb-3">
 		                  	<label for="nombre" class="form-label">Nombre</label>
 		                  	<input id="nombre" type="text" class="form-control" type="text" name="nombre"  placeholder="nombre">
 		                </div>
-		                <div class="row">
+		                <div class="row" id="claves">
 			                <div class="col-md-6">
 			                    <div class="mb-3">
 			                      <label for="clave" class="form-label">Contraseña</label>
@@ -82,7 +83,7 @@
 				    </div>
 				    <div class="modal-footer">
 				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				        <button type="button" class="btn btn-primary" onclick="registarUser(event);">Registrar</button>
+				        <button type="button" class="btn btn-primary" onclick="registarUser(event);" id="btnAccion">Registrar</button>
 				    </div>
 				</form>
 		    </div>

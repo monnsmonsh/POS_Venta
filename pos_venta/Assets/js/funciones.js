@@ -67,7 +67,17 @@ function frmLogin(e){
 
 //crear usuario
 function frmUsuario(){
+	//accedemos al titulo de la ventana modal para cambiar el  titulo y el btn
+	document.getElementById("title").innerHTML ="Nuevo Usuario"
+	document.getElementById("btnAccion").innerHTML ="Registrar"
+	//muestra los input de las claves
+	document.getElementById("claves").classList.remove("d-none");
+	//reseteamos el frm
+	document.getElementById("frmUsuario").reset();
+
 	$("#nuevo_usuario").modal("show");
+
+	document.getElementById("id").value ="";
 }
 
 //registra usuario
@@ -80,7 +90,7 @@ function registarUser(e){
 	const caja = document.getElementById("caja");
 
 	//realizamos validacions y verificamos:
-	if(usuario.value == "" || nombre.value == "" || clave.value == "" || caja.value == ""){
+	if(usuario.value == "" || nombre.value == "" || caja.value == ""){
 		//mostramos alerta con sweetalert2
 		Swal.fire({
 		  	position: 'top-center',
@@ -89,18 +99,7 @@ function registarUser(e){
 		  	showConfirmButton: false,
 		  	timer: 2000
 		})	
-	}
-	//realizamos validacion y de que las contraseñas coincidan
-	else if(clave.value != confirmar.value){
-		Swal.fire({
-		  	position: 'top-center',
-		  	icon: 'error',
-		  	title: 'Las contraseñas no coinciden',
-		  	showConfirmButton: false,
-		  	timer: 2000
-		})
-	}
-	else{
+	}else{
 		const url = base_url + "Usuarios/registrar";
 		const frm = document.getElementById("frmUsuario");
 		const http = new XMLHttpRequest();
@@ -122,7 +121,20 @@ function registarUser(e){
 					frm.reset();
 					//oculdamo el modal
 					$('#nuevo_usuario').modal("hide");
-
+					//recargamos la tbl
+					tblUsuarios.ajax.reload();
+				}
+				//si el usuario es modificado
+				else if(res == "modificado"){
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'success',
+					  	title: 'Usuario modificado con exito',
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+					$('#nuevo_usuario').modal("hide")
+					tblUsuarios.ajax.reload();
 				}else{
 					Swal.fire({
 					  	position: 'top-center',
@@ -137,3 +149,32 @@ function registarUser(e){
 	}
 }
 
+//editar usuario
+function btnEditarUser(id){
+	//accedemos al titulo de la ventana modal para cambiar el tituloy el btn
+	document.getElementById("title").innerHTML ="Actualizar Usuario"
+	document.getElementById("btnAccion").innerHTML ="Modifcar"
+
+	//obtenemos los datos para editar
+	const url = base_url + "Usuarios/editar/"+id;
+		const http = new XMLHttpRequest();
+		http.open("GET", url, true);
+		http.send();
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText); 
+				const res = JSON.parse(this.responseText);
+				document.getElementById("id").value = res.id;
+				//accedemos a los datos a editar
+				document.getElementById("usuario").value = res.usuario;
+				document.getElementById("nombre").value = res.nombre;
+				document.getElementById("caja").value = res.id_caja;
+				//ocultamos los input de las claves
+				document.getElementById("claves").classList.add("d-none");
+				$("#nuevo_usuario").modal("show");
+
+			} 
+		}
+
+	
+}
