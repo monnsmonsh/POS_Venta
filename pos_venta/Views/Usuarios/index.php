@@ -4,7 +4,7 @@
         <li class="breadcrumb-item active">Usuarios</li>
     </ol>
 
-    <button class="btn btn-primary mb-2" type="submit" onclick="frmUsuario();">Nuevo</button>
+    <button class="btn btn-primary mb-2" type="submit" onclick="frmUsuario();"><i class="fas fa-plus"></i></button>
 
 
 		
@@ -35,8 +35,8 @@
 		<div class="modal-dialog">
 		    <div class="modal-content">
 		    	<form method="post" id="frmUsuario">
-				    <div class="modal-header">
-				        <h5 class="modal-title" id="title">Nuevo Usuario</h5>
+				    <div class="modal-header bg-primary">
+				        <h5 class="modal-title text-white" id="title">Nuevo Usuario</h5>
 				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				    </div>
 				    <div class="modal-body">
@@ -82,7 +82,7 @@
 		                
 				    </div>
 				    <div class="modal-footer">
-				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
 				        <button type="button" class="btn btn-primary" onclick="registarUser(event);" id="btnAccion">Registrar</button>
 				    </div>
 				</form>

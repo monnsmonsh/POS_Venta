@@ -6,13 +6,16 @@ class Usuarios extends Controller
 	{
 		//iniciamos seccion
         session_start();
-
+		if (empty($_SESSION['activo'])) {
+            header("location: ".base_url);
+        }
         //cargamos el constructor de la instancia
         parent::__construct();
     }
 
 	public function index()
 	{
+
 		//accedemos a la accion getUsuario
 		//print_r($this->model->getUsuario());
 
@@ -38,8 +41,11 @@ class Usuarios extends Controller
 
              
 			$data[$i]['acciones'] = '<div>
-                <button class="btn btn-primary" type="button" onclick="btnEditarUser('.$data[$i]['id'].');"> Editar</button>
-                <button class="btn btn-danger" type="button">Eliminar</button>
+                <button class="btn btn-primary" type="button" onclick="btnEditarUser(' . $data[$i]['id'] . ');"><i class="fas fa-edit"></i></button>
+
+                <button class="btn btn-danger" type="button" onclick="btnEliminarUser(' . $data[$i]['id'] . ');"><i class="fas fa-trash-alt"></i></button>
+
+                <button class="btn btn-success" type="button" onclick="btnReingresarUser('.$data[$i]['id'].');">Reingresar</button>
                 <div/>';
 		}
 		echo json_encode($data,JSON_UNESCAPED_UNICODE);
@@ -55,9 +61,10 @@ class Usuarios extends Controller
         }
         else{
 			//validamos datos
-			$usuario =$_POST['usuario'];
-			$clave =$_POST['clave'];
-			$data = $this->model->getUsuario($usuario, $clave);
+			$usuario = $_POST['usuario'];
+            $clave = $_POST['clave'];
+            $hash = hash("SHA256", $clave);
+            $data = $this->model->getUsuario($usuario, $hash);
 
 			//Si exite algo en var $data inciamos seccion
 			if ($data) {
@@ -65,7 +72,8 @@ class Usuarios extends Controller
                 $_SESSION['id_usuario'] = $data['id'];
                 $_SESSION['usuario'] = $data['usuario'];
                 $_SESSION['nombre'] = $data['nombre'];
-                //$_SESSION['activo'] = true;
+                //para 
+                $_SESSION['activo'] = true;
                 //monstramos mensaje de seccion inciada
                 $msg = "ok";
             }
@@ -140,6 +148,39 @@ class Usuarios extends Controller
 		$data = $this->model->editarUsuario($id);
 		echo json_encode($data, JSON_UNESCAPED_UNICODE);
 		die();
+	}
+	public function eliminar(int $id)
+	{
+		//print_r($id);
+		//llamos al metodo "accionUsuario"
+		$data = $this->model->accionUsuario(0, $id);
+		//validamos
+		if ($data == 1) {
+			$msg = "ok";
+		}else{
+			$msg ="Error al eliminar el Usuario";
+		}
+		echo json_encode($msg, JSON_UNESCAPED_UNICODE);
+		die(); 
+	}
+	public function reingresar(int $id)
+	{
+		//print_r($id);
+		//llamos al metodo "accionUsuario"
+		$data = $this->model->accionUsuario(1, $id);
+		//validamos
+		if ($data == 1) {
+			$msg = "ok";
+		}else{
+			$msg ="Error al reingresar el Usuario";
+		}
+		echo json_encode($msg, JSON_UNESCAPED_UNICODE);
+		die(); 
+	}
+
+	public function salir(){
+		session_destroy();
+		header("location: ".base_url);
 	}
 
 

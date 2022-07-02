@@ -1,7 +1,7 @@
 <?php
 //
 class Views{
-	public function getView($controlador, $vista, $data)
+	public function getView($controlador, $vista, $data="")
 	{
 		$controlador = get_class($controlador);
 		//Validamos si el controlador es igual HOME

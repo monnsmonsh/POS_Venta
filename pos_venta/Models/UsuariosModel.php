@@ -3,7 +3,7 @@
 class UsuariosModel extends Query{
 
 	//las variables de la funcion de registroUsuario la ponemos privado
-	private $usuario, $nombre, $clave, $id_caja;
+	private $usuario, $nombre, $clave, $id_caja, $id, $estado;
 
 	public function __construct()
 	{
@@ -89,6 +89,16 @@ class UsuariosModel extends Query{
         return $res;
 	}
 
+	//eliminamos usuario y reactivamos (desavilitar)
+	public function accionUsuario(int $estado, int $id)
+	{
+		$this->id = $id;
+		$this->estado = $estado;
+		$sql = "UPDATE usuarios SET estado = ? WHERE id = ?";
+		$datos =array($this->estado, $this->id);
+		$data =$this->save($sql, $datos);
+		return $data;
+	}
 
 	public function getCajas()
 	{
