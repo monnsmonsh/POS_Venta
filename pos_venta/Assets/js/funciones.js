@@ -736,6 +736,9 @@ function btnReingresarMed(id){
 
 
 
+
+
+
 //
 //Inicio de Cajas
 //
@@ -955,3 +958,228 @@ function btnReingresarCaj(id){
 //
 //
 //Fin Cajas
+
+
+
+
+
+
+
+//
+//Inicio de CATEGORIAS
+//
+//recibimos la lista de medidas
+let tblCategorias;
+document.addEventListener("DOMContentLoaded", function(){
+	tblCategorias = $('#tblCategorias').DataTable({
+        ajax: {
+            url: base_url + "Categorias/listar",
+            dataSrc: ''
+        },
+        columns: [
+        	{'data' : 'id'},
+        	{'data' : 'nombre'},
+           	//generamos un obj para estado
+            {'data' : 'estado'},
+           	//generamos un obj para las acciones
+            {'data' : 'acciones'},
+	    ],
+	    language: {
+            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
+        },
+	});
+})
+
+//crear caja
+function frmCategoria(){
+	//accedemos al titulo de la ventana modal para cambiar el  titulo y el btn
+	document.getElementById("title").innerHTML = "Nueva Categoria";
+	document.getElementById("btnAccion").innerHTML = "Registrar";
+	//reseteamos el frm
+	document.getElementById("frmCategoria").reset();
+	$("#nueva_categoria").modal("show");
+	document.getElementById("id").value ="";
+}
+
+//registrar caja
+function registarCat(e){
+	e.preventDefault();
+	const nombre = document.getElementById("nombre");
+
+	//realizamos validacions y verificamos:
+	if(nombre.value == ""){
+		//mostramos alerta con sweetalert2
+		Swal.fire({
+		  	position: 'top-center',
+		  	icon: 'error',
+		  	title: 'Todos los campos son obligatorios',
+		  	showConfirmButton: false,
+		  	timer: 2000
+		})	
+	}else{
+		const url = base_url + "Categorias/registrar";
+		const frm = document.getElementById("frmCategoria");
+		const http = new XMLHttpRequest();
+		http.open("POST", url, true);
+		http.send(new FormData(frm));
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				const res= JSON.parse(this.responseText);
+				if (res =="si"){
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'success',
+					  	title: 'Categoria registrado con exito',
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+					//reseteamos frm
+					frm.reset();
+					//oculdamo el modal
+					$('#nueva_categoria').modal("hide");
+					//recargamos la tbl
+					tblCategorias.ajax.reload();
+				}
+				//si el medida es modificado
+				else if(res == "modificado"){
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'success',
+					  	title: 'Categoria modificado con exito',
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+					$('#nueva_categoria').modal("hide")
+					tblCategorias.ajax.reload();
+				}else{
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'error',
+					  	title: res,
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+				}
+			} 
+		}
+	}
+}
+
+//editar caja
+function btnEditarCat(id){
+	//accedemos al titulo de la ventana modal para cambiar el tituloy el btn
+	document.getElementById("title").innerHTML ="Actualizar Categoria"
+	document.getElementById("btnAccion").innerHTML ="Modifcar"
+
+	//obtenemos los datos para editar
+	const url = base_url + "Categorias/editar/"+id;
+	const http = new XMLHttpRequest();
+	http.open("GET", url, true);
+	http.send();
+	http.onreadystatechange = function(){
+		if (this.readyState == 4 && this.status == 200){
+			//console.log(this.responseText); 
+			const res = JSON.parse(this.responseText);
+			document.getElementById("id").value = res.id;
+			//accedemos a los datos a editar
+			document.getElementById("nombre").value = res.nombre;
+			$("#nueva_categoria").modal("show");
+		} 
+	}	
+}
+//eliminar categorias
+function btnEliminarCat(id){
+	//alert(id);
+	Swal.fire({
+	  	title: '¿Estas seguro de eliminar?',
+	  	text: "La Categoria no se eliminara de forma permanete, solo cambiara el estado a inactivo",
+	  	icon: 'warning',
+	  	showCancelButton: true,
+	  	confirmButtonColor: '#3085d6',
+	  	cancelButtonColor: '#d33',
+	  	confirmButtonText: 'SI',
+	  	cancelButtonText: 'NO'
+	}).then((result) => {
+	  if (result.isConfirmed) {
+	  	//enviamos el id
+
+		//obtenemos los datos para editar
+		const url = base_url + "Categorias/eliminar/"+id;
+		const http = new XMLHttpRequest();
+		http.open("GET", url, true);
+		http.send();
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				const res = JSON.parse(this.responseText);
+				if (res == "ok") {
+					Swal.fire(
+				      'Mensaje!',
+				      'Categoria eliminado con exito.',
+				      'success'
+				    )
+					tblCategorias.ajax.reload();
+				}else{
+					Swal.fire(
+				      'Mensaje!',
+				      res,
+				      'error'
+				    )
+				}
+			} 
+		}
+
+	    
+	  }
+	})
+}
+
+//Reingresar categoria
+function btnReingresarCat(id){
+	//alert(id);
+	Swal.fire({
+	  	title: '¿Estas seguro de reingresar?',
+	  	icon: 'warning',
+	  	showCancelButton: true,
+	  	confirmButtonColor: '#3085d6',
+	  	cancelButtonColor: '#d33',
+	  	confirmButtonText: 'SI',
+	  	cancelButtonText: 'NO'
+	}).then((result) => {
+	  if (result.isConfirmed) {
+	  	//enviamos el id
+
+		//obtenemos los datos para editar
+		const url = base_url + "Categorias/reingresar/"+id;
+		const http = new XMLHttpRequest();
+		http.open("GET", url, true);
+		http.send();
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				const res = JSON.parse(this.responseText);
+				if (res == "ok") {
+					Swal.fire(
+				      'Mensaje!',
+				      'Categorias reigresado con exito.',
+				      'success'
+				    )
+					tblCategorias.ajax.reload();
+				}else{
+					Swal.fire(
+				      'Mensaje!',
+				      res,
+				      'error'
+				    )
+				}
+			} 
+		}
+
+	    
+	  }
+	})
+}
+//
+//
+//Fin CATEGORIAS

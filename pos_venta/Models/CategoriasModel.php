@@ -1,9 +1,9 @@
 <?php
 
-class CajasModel extends Query{
+class CategoriasModel extends Query{
 
 	//las variables de la funcion de registro Clientes la ponemos privado
-	private  $cajas, $id, $estado;
+	private  $nombre, $id, $estado;
 
 	public function __construct()
 	{
@@ -11,27 +11,26 @@ class CajasModel extends Query{
 	}
 
 	//para optener la lista de MEdidas
-	public function getCajas()
+	public function getCategorias()
 	{
-		//$sql = "SELECT * FROM medidas";
-		$sql = "SELECT * FROM caja";
+		$sql = "SELECT * FROM categorias";
 		$data = $this->selectall($sql);
 		return $data;
 	}
 
 	//creamos la funcion de resgistro donde indicamos que recibimos ()
-	public function registrarCaja(string $caja)
+	public function registrarCategoria(string $nombre)
 	{
 		//acedemos a las var e igualamos el parametro
-		$this->caja= $caja;
+		$this->nombre= $nombre;
 
 		//verificamos que no tengamos otro mismo cliente
-		$verificar = "SELECT * FROM caja WHERE caja ='$this->caja'";
+		$verificar = "SELECT * FROM categorias WHERE nombre ='$this->nombre'";
 		$exite = $this->select($verificar);
 		if(empty($exite)){
 			// si no existe realizamos la isercion
-			$sql = "INSERT INTO caja(caja) VALUES (?)";
-			$datos = array($this->caja);
+			$sql = "INSERT INTO categorias(nombre) VALUES (?)";
+			$datos = array($this->nombre);
 
 			//llamamos al meto "save" dentro 
 			$data = $this->save($sql, $datos);
@@ -48,22 +47,22 @@ class CajasModel extends Query{
 	}
 	
 	//realizamos un metodo para realizar una consulta
-	public function editarCaja(int $id)
+	public function editarCategoria(int $id)
     {
-        $sql = "SELECT * FROM caja WHERE id = $id";
+        $sql = "SELECT * FROM categorias WHERE id = $id";
         $data = $this->select($sql);
         return $data;
 	}
 	
 	//creamos la funcion de modificar donde indicamos que recibimos ()
-	public function modificarCaja(string $caja, int $id)
+	public function modificarCategoria(string $nombre, int $id)
     {
 		//acedemos a las var e igualamos el parametro
-        $this->caja = $caja;
+        $this->nombre = $nombre;
         $this->id = $id;
 
-        $sql = "UPDATE caja SET caja = ? WHERE id = ?";
-        $datos = array($this->caja, $this->id);
+        $sql = "UPDATE categorias SET nombre = ? WHERE id = ?";
+        $datos = array($this->nombre, $this->id);
 
 		//llamamos al meto "save" dentro 
 		$data = $this->save($sql, $datos);
@@ -77,11 +76,11 @@ class CajasModel extends Query{
 	}
 
 	//eliminamos caja y reactivamos (desavilitar)
-	public function accionCaja(int $estado, int $id)
+	public function accionCategoria(int $estado, int $id)
 	{
 		$this->id = $id;
 		$this->estado = $estado;
-		$sql = "UPDATE caja SET estado = ? WHERE id = ?";
+		$sql = "UPDATE categorias SET estado = ? WHERE id = ?";
 		$datos =array($this->estado, $this->id);
 		$data =$this->save($sql, $datos);
 		return $data;
