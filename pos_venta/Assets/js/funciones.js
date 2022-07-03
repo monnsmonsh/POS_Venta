@@ -17,13 +17,14 @@ document.addEventListener("DOMContentLoaded", function(){
            	//generamos un obj para estado
             {'data' : 'estado'},
            	//generamos un obj para las acciones
-            {'data' : 'acciones'}
+            {'data' : 'acciones'},
 
-	    ]
-	});
+	    ],
+	    language: {
+            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
+        },
+	});//Fin de la tabla Usuarios
 })
-
-
 
 function frmLogin(e){
 	e.preventDefault();
@@ -296,9 +297,11 @@ document.addEventListener("DOMContentLoaded", function(){
            	//generamos un obj para estado
             {'data' : 'estado'},
            	//generamos un obj para las acciones
-            {'data' : 'acciones'}
-
-	    ]
+            {'data' : 'acciones'},
+	    ],
+	    language: {
+            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
+        },
 	});
 })
 //crear cliente
@@ -503,6 +506,9 @@ function btnReingresarCli(id){
 //Fin Clientes
 
 
+
+
+
 //
 //Inicio de Medidas
 //
@@ -521,11 +527,14 @@ document.addEventListener("DOMContentLoaded", function(){
            	//generamos un obj para estado
             {'data' : 'estado'},
            	//generamos un obj para las acciones
-            {'data' : 'acciones'}
-
-	    ]
+            {'data' : 'acciones'},
+	    ],
+	    language: {
+            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
+        },
 	});
 })
+
 //crear medida
 function frmMedida(){
 	//accedemos al titulo de la ventana modal para cambiar el  titulo y el btn
@@ -533,12 +542,11 @@ function frmMedida(){
 	document.getElementById("btnAccion").innerHTML = "Registrar";
 	//reseteamos el frm
 	document.getElementById("frmMedida").reset();
-
 	$("#nueva_medida").modal("show");
-
 	document.getElementById("id").value ="";
 }
 
+//registrar medida
 function registarMed(e){
 	e.preventDefault();
 	const nombre = document.getElementById("nombre");
@@ -719,3 +727,231 @@ function btnReingresarMed(id){
 	  }
 	})
 }
+//
+//
+//Fin Medidas
+
+
+
+
+
+
+//
+//Inicio de Cajas
+//
+//recibimos la lista de medidas
+
+let tblCajas;
+document.addEventListener("DOMContentLoaded", function(){
+	tblCajas = $('#tblCajas').DataTable({
+        ajax: {
+            url: base_url + "Cajas/listar",
+            dataSrc: ''
+        },
+        columns: [
+        	{'data' : 'id'},
+        	{'data' : 'caja'},
+           	//generamos un obj para estado
+            {'data' : 'estado'},
+           	//generamos un obj para las acciones
+            {'data' : 'acciones'},
+	    ],
+	    language: {
+            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
+        },
+	});
+})
+
+//crear caja
+function frmCaja(){
+	//accedemos al titulo de la ventana modal para cambiar el  titulo y el btn
+	document.getElementById("title").innerHTML = "Nueva Caja";
+	document.getElementById("btnAccion").innerHTML = "Registrar";
+	//reseteamos el frm
+	document.getElementById("frmCaja").reset();
+	$("#nueva_caja").modal("show");
+	document.getElementById("id").value ="";
+}
+
+//registrar caja
+function registarCaj(e){
+	e.preventDefault();
+	const caja = document.getElementById("caja");
+
+	//realizamos validacions y verificamos:
+	if(caja.value == ""){
+		//mostramos alerta con sweetalert2
+		Swal.fire({
+		  	position: 'top-center',
+		  	icon: 'error',
+		  	title: 'Todos los campos son obligatorios',
+		  	showConfirmButton: false,
+		  	timer: 2000
+		})	
+	}else{
+		const url = base_url + "Cajas/registrar";
+		const frm = document.getElementById("frmCaja");
+		const http = new XMLHttpRequest();
+		http.open("POST", url, true);
+		http.send(new FormData(frm));
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				const res= JSON.parse(this.responseText);
+				if (res =="si"){
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'success',
+					  	title: 'Caja registrado con exito',
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+					//reseteamos frm
+					frm.reset();
+					//oculdamo el modal
+					$('#nueva_caja').modal("hide");
+					//recargamos la tbl
+					tblCajas.ajax.reload();
+				}
+				//si el medida es modificado
+				else if(res == "modificado"){
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'success',
+					  	title: 'Caja modificado con exito',
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+					$('#nueva_caja').modal("hide")
+					tblCajas.ajax.reload();
+				}else{
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'error',
+					  	title: res,
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+				}
+			} 
+		}
+	}
+}
+
+//editar caja
+function btnEditarCaj(id){
+	//accedemos al titulo de la ventana modal para cambiar el tituloy el btn
+	document.getElementById("title").innerHTML ="Actualizar Caja"
+	document.getElementById("btnAccion").innerHTML ="Modifcar"
+
+	//obtenemos los datos para editar
+	const url = base_url + "Cajas/editar/"+id;
+	const http = new XMLHttpRequest();
+	http.open("GET", url, true);
+	http.send();
+	http.onreadystatechange = function(){
+		if (this.readyState == 4 && this.status == 200){
+			//console.log(this.responseText); 
+			const res = JSON.parse(this.responseText);
+			document.getElementById("id").value = res.id;
+			//accedemos a los datos a editar
+			document.getElementById("caja").value = res.caja;
+			$("#nueva_caja").modal("show");
+		} 
+	}	
+}
+//eliminar medida
+function btnEliminarCaj(id){
+	//alert(id);
+	Swal.fire({
+	  	title: '¿Estas seguro de eliminar?',
+	  	text: "La Caja no se eliminara de forma permanete, solo cambiara el estado a inactivo",
+	  	icon: 'warning',
+	  	showCancelButton: true,
+	  	confirmButtonColor: '#3085d6',
+	  	cancelButtonColor: '#d33',
+	  	confirmButtonText: 'SI',
+	  	cancelButtonText: 'NO'
+	}).then((result) => {
+	  if (result.isConfirmed) {
+	  	//enviamos el id
+
+		//obtenemos los datos para editar
+		const url = base_url + "Cajas/eliminar/"+id;
+		const http = new XMLHttpRequest();
+		http.open("GET", url, true);
+		http.send();
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				const res = JSON.parse(this.responseText);
+				if (res == "ok") {
+					Swal.fire(
+				      'Mensaje!',
+				      'Caja eliminado con exito.',
+				      'success'
+				    )
+					tblCajas.ajax.reload();
+				}else{
+					Swal.fire(
+				      'Mensaje!',
+				      res,
+				      'error'
+				    )
+				}
+			} 
+		}
+
+	    
+	  }
+	})
+}
+
+//Reingresar media
+function btnReingresarCaj(id){
+	//alert(id);
+	Swal.fire({
+	  	title: '¿Estas seguro de reingresar?',
+	  	icon: 'warning',
+	  	showCancelButton: true,
+	  	confirmButtonColor: '#3085d6',
+	  	cancelButtonColor: '#d33',
+	  	confirmButtonText: 'SI',
+	  	cancelButtonText: 'NO'
+	}).then((result) => {
+	  if (result.isConfirmed) {
+	  	//enviamos el id
+
+		//obtenemos los datos para editar
+		const url = base_url + "Cajas/reingresar/"+id;
+		const http = new XMLHttpRequest();
+		http.open("GET", url, true);
+		http.send();
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				const res = JSON.parse(this.responseText);
+				if (res == "ok") {
+					Swal.fire(
+				      'Mensaje!',
+				      'Medida reigresado con exito.',
+				      'success'
+				    )
+					tblCajas.ajax.reload();
+				}else{
+					Swal.fire(
+				      'Mensaje!',
+				      res,
+				      'error'
+				    )
+				}
+			} 
+		}
+
+	    
+	  }
+	})
+}
+//
+//
+//Fin Cajas
