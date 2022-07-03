@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-07-2022 a las 11:47:11
+-- Tiempo de generación: 03-07-2022 a las 05:34:48
 -- Versión del servidor: 10.4.18-MariaDB
 -- Versión de PHP: 8.0.3
 
@@ -41,7 +41,8 @@ INSERT INTO `caja` (`id`, `caja`, `estado`) VALUES
 (1, 'General', 1),
 (2, 'Secundaria', 1),
 (3, 'Temporal', 1),
-(4, 'Express', 1);
+(4, 'Express', 0),
+(5, 'PRUEVA', 0);
 
 -- --------------------------------------------------------
 
@@ -54,6 +55,17 @@ CREATE TABLE `categorias` (
   `nombre` varchar(50) NOT NULL,
   `estado` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `categorias`
+--
+
+INSERT INTO `categorias` (`id`, `nombre`, `estado`) VALUES
+(1, 'Refresco', 1),
+(2, 'Alimentos', 1),
+(3, 'Refresco', 1),
+(4, 'Frituras', 1),
+(5, 'PRUEVA', 0);
 
 -- --------------------------------------------------------
 
@@ -76,7 +88,8 @@ CREATE TABLE `clientes` (
 
 INSERT INTO `clientes` (`id`, `dni`, `nombre`, `telefono`, `direccion`, `estado`) VALUES
 (1, '12356456123', 'Juan Luis ', '4183214578', 'las golondrinas', 0),
-(2, '879564123', 'Julissa', '5461631', 'ddsadasd', 1);
+(2, '879564123', 'Julissa', '5461631', 'ddsadasd', 1),
+(3, '78989456', 'Julissa', '4515644', 'Azucenas 14', 0);
 
 -- --------------------------------------------------------
 
@@ -90,6 +103,19 @@ CREATE TABLE `medidas` (
   `nombre_corto` varchar(5) NOT NULL,
   `estado` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `medidas`
+--
+
+INSERT INTO `medidas` (`id`, `nombre`, `nombre_corto`, `estado`) VALUES
+(1, 'Gramos', 'gr', 0),
+(2, 'Kiologramos', 'kg', 1),
+(3, 'Pieza', 'pz', 1),
+(4, 'No Aplica', 'N/O', 1),
+(5, 'Litro', 'lt', 0),
+(6, 'Onza', 'oz', 1),
+(7, 'PRUEVA', 'PRUEV', 1);
 
 -- --------------------------------------------------------
 
@@ -157,25 +183,25 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `caja`
 --
 ALTER TABLE `caja`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `medidas`
 --
 ALTER TABLE `medidas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
