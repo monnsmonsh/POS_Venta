@@ -35,7 +35,7 @@ class ProductosModel extends Query{
 	}
 
 	//creamos la funcion de resgistro donde indicamos que recibimos ()
-	public function registrarProducto(string $codigo, string $descripcion, string $precio_compra, string $precio_venta, int $id_medida, int $id_categoria)
+	public function registrarProducto(string $codigo, string $descripcion, string $precio_compra, string $precio_venta, int $id_medida, int $id_categoria, string $img)
 	{
 		//acedemos a las var e igualamos el parametro
 		$this->codigo= $codigo;
@@ -45,15 +45,18 @@ class ProductosModel extends Query{
 		$this->id_medida= $id_medida;
 		$this->id_categoria= $id_categoria;
 
+		//ist un def jpg
+		$this->img= $img;
+
 		//verificamos que no tengamos otro mismo usuario
 		$verificar = "SELECT * FROM productos WHERE codigo ='$this->codigo'";
 
 		//si exite un mismo product ::codigo
 		$exite = $this->select($verificar);
 		if(empty($exite)){
-			// si no existe realizamos la isercion
-			$sql = "INSERT INTO productos(codigo, descripcion, precio_compra, precio_venta, id_medida, id_categoria) VALUES (?,?,?,?,?,?)";
-			$datos = array($this->codigo, $this->descripcion, $this->precio_compra, $this->precio_venta, $this->id_medida, $this->id_categoria);
+			// si no existe realizamos la iserccion
+			$sql = "INSERT INTO productos(codigo, descripcion, precio_compra, precio_venta, id_medida, id_categoria, foto) VALUES (?,?,?,?,?,?,?)";
+			$datos = array($this->codigo, $this->descripcion, $this->precio_compra, $this->precio_venta, $this->id_medida, $this->id_categoria, $this->img);
 
 			//llamamos al meto "save" dentro 
 			$data = $this->save($sql, $datos);
@@ -80,7 +83,7 @@ class ProductosModel extends Query{
 	}
 	
 	//creamos la funcion de modificar donde indicamos que recibimos ()
-	public function modificarProducto(string $codigo, string $descripcion, string $precio_compra, string $precio_venta, int $id_medida, int $id_categoria, int $id)
+	public function modificarProducto(string $codigo, string $descripcion, string $precio_compra, string $precio_venta, int $id_medida, int $id_categoria, string $img, int $id)
     {
 		//acedemos a las var e igualamos el parametro
 		$this->codigo= $codigo;
@@ -90,10 +93,13 @@ class ProductosModel extends Query{
 		$this->id_medida= $id_medida;
 		$this->id_categoria= $id_categoria;
 
+		//ist un def jpg
+		$this->img= $img;
+
         $this->id = $id;
 
-        $sql = "UPDATE productos SET codigo = ?, descripcion = ?, precio_compra = ?, precio_venta = ?,id_medida = ?, id_categoria = ? WHERE id = ?";
-        $datos = array($this->codigo, $this->descripcion, $this->precio_compra, $this->precio_venta, $this->id_medida, $this->id_categoria, $this->id);
+        $sql = "UPDATE productos SET codigo = ?, descripcion = ?, precio_compra = ?, precio_venta = ?,id_medida = ?, id_categoria = ?, foto = ? WHERE id = ?";
+        $datos = array($this->codigo, $this->descripcion, $this->precio_compra, $this->precio_venta, $this->id_medida, $this->id_categoria, $this->img, $this->id);
 
 		//llamamos al meto "save" dentro 
 		$data = $this->save($sql, $datos);

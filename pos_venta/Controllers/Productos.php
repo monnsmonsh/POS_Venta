@@ -33,6 +33,10 @@ class Productos extends Controller
 		$data = ($this->model->getProductos());
 		//generamos los botones de editar y eliminar
 		for($i=0; $i< count($data); $i++){
+
+			//par lista img
+			$data[$i]['imagen'] ='<img class="img-thumbnail" style="width:150px;" src="'. base_url. "Assets/img/productos/". $data[$i]['foto'].'">';
+
 			//valdiacion de estado de usuario
 			if ($data[$i]['estado'] == 1) {
                 $data[$i]['estado'] = '<span class="badge bg-success">Activo</span>';
@@ -62,7 +66,16 @@ class Productos extends Controller
 		$precio_venta = $_POST['precio_venta'];
 		$medida =$_POST['medida'];
 		$categoria =$_POST['categoria'];
-
+		
+		// var para img
+		$img= $_FILES['imagen'];
+			$name = $img['name'];
+			$tmpname = $img['tmp_name'];
+			$destino = "Assets/img/productos/".$name;
+		//verificamos que tenemos algo por el metodo fiel
+		if(empty($name)){
+			$name = "default.jpg";
+		}
 		$id =$_POST['id'];
 
 		if(empty ($codigo) || empty ($descripcion) || empty ($precio_compra) || empty ($precio_venta) || empty ($medida) || empty ($categoria)){
@@ -73,28 +86,44 @@ class Productos extends Controller
 			//si es un nuevo registro lo registramos
 			if($id == ""){
 				// con parametro 6
-				$data = $this->model->registrarProducto($codigo, $descripcion, $precio_compra, $precio_venta, $medida, $categoria);
+				$data = $this->model->registrarProducto($codigo, $descripcion, $precio_compra, $precio_venta, $medida, $categoria, $name);
 				//verificamos la respusta caja
 				if($data == "ok"){
 					//$msg = "usuario registrar con exito";
 					//cambiamos msg para realziar una validacion
 					$msg = "si";
+					//movemos la img a la carpeta def
+					move_uploaded_file($tmpname, $destino);
 				}else if($data == "exite"){
 					$msg = "¡¡Error!! El usuario ya existe";
 				}else{
 					$msg ="error al aregistrar el usuario";
 				}
 			}else{
-				$data = $this->model->modificarProducto($codigo, $descripcion, $precio_compra, $precio_venta, $medida, $categoria, $id);
+				//verificamos si img se mod
+				if($_POST['foto_actual'] != $_POST['foto_delete']){
+					//eliminar img remplasasa
+					$imgDelete = $data = $this->model->editarProducto($id);
+					if ($imgDelete['foto'] !='default.jpg' || $imgDelete['foto'] != ""){
+						if(file_exists($destino . $imgDelete['foto'])){
+							unlink($destino . $imgDelete['foto']);
+						}
+					}
+					$data = $this->model->modificarProducto($codigo, $descripcion, $precio_compra, $precio_venta, $medida, $categoria, $name, $id);
 					//verificamos la respusta caja
 					if($data == "modificado"){
 						//$msg = "producto modificado con exito";
 						//cambiamos msg para realziar una validacion
 						$msg = "modificado";
+						//movemos la img a la carpeta def
+						move_uploaded_file($tmpname, $destino);
 					}else{
 						$msg ="Error al modificar el producto";
 					}
 
+
+				}
+				
 			}
 			
 		}

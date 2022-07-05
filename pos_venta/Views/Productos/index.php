@@ -15,6 +15,7 @@
         	<table class="table table-hover" style="width:100%" id="tblProductos">
 				<thead class="table-dark">
 			    	<th>Id</th>
+			    	<th>IMG</th>
 			    	<th>Codigo</th>
 			    	<th>Descripcion</th>
 			    	<th>Precio</th>
@@ -92,6 +93,26 @@
 			                    	</select>
 			                	</div> 
 			                </div>
+		                </div>
+
+		                 <div class="mb-3">
+		                  	<label>Foto</label>
+		                  	<div class="card boder-primary">
+		                  		<div class="card-body">
+		                  			<label for="imagen" id="icon-image" class="btn btn-primary"><i class="fas fa-image"></i></label>
+
+		                  			<span id="icon-cerrar"></span>
+									<input type="hidden" id="foto_actual" name="foto_actual">
+		                  			<input type="hidden" id="foto_delete" name="foto_delete">
+		                  			<input id="imagen" class="d-none" type="file" name="imagen" onchange="preview(event)">
+
+		                  			
+
+		                  			<img class="img-thumbnail" id="img-preview">
+		                  			
+		                  		</div>
+		                  	</div>
+		                  	
 		                </div>
 
 		                  

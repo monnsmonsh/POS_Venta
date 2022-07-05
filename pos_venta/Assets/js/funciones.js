@@ -1160,6 +1160,7 @@ document.addEventListener("DOMContentLoaded", function(){
         },
         columns: [
         	{'data' : 'id'},
+        	{'data' : 'imagen'},
         	{'data' : 'codigo'},
         	{'data' : 'descripcion'},
         	{'data' : 'precio_venta'},
@@ -1184,6 +1185,9 @@ function frmProducto(){
 	document.getElementById("frmProducto").reset();
 	$("#nuevo_producto").modal("show");
 	document.getElementById("id").value ="";
+
+	//limpiar campos con iumg
+	deleteImg();
 }
 
 //registrar producto
@@ -1279,6 +1283,19 @@ function btnEditarPro(id){
 			document.getElementById("precio_venta").value = res.precio_venta;
 			document.getElementById("media").value = res.id_medida;
 			document.getElementById("categoria").value = res.id_categoria;
+
+			//obtenr img
+			document.getElementById("img-preview").src = base_url+'Assets/img/productos/'+res.foto;
+			document.getElementById("icon-cerrar").innerHTML= `
+				<button class="btn btn-danger" onclick="deleteImg()">
+					<i class="fas fa-times"></i>
+				</button>`;
+			//monstrar la calses dis
+			document.getElementById("icon-image").classList.add("d-none");
+			
+			document.getElementById("foto_actual").value = res.foto;
+			document.getElementById("foto_delete").value = res.foto;
+			
 			$("#nuevo_producto").modal("show");
 		} 
 	}	
@@ -1374,6 +1391,35 @@ function btnReingresarPro(id){
 	    
 	  }
 	})
+}
+
+//para monstrar la img
+function preview(e){
+	//console.log(e.target.files);
+	//alamcenamos la img en una cosnt
+	const url = e.target.files[0];
+	const urlTmp = URL.createObjectURL(url);
+	//motramos img seleccionada
+	document.getElementById("img-preview").src = urlTmp;
+	//para ocultar el ico una ves que tengamos img
+	document.getElementById("icon-image").classList.add("d-none");
+
+	document.getElementById("icon-cerrar").innerHTML= `
+	<button class="btn btn-danger" onclick="deleteImg()"><i class="fas fa-times"></i></button>
+	${url['name']}`;
+
+
+}
+//para eliminar la img
+function deleteImg(){
+	document.getElementById("icon-cerrar").innerHTML='';
+	//monstrar la calses dis
+	document.getElementById("icon-image").classList.remove("d-none");
+	//quitar vista prev
+	document.getElementById("img-preview").src = '';
+	document.getElementById("imagen").value ='';
+
+	document.getElementById("foto_delete").value ='';
 }
 //
 //
