@@ -77,6 +77,10 @@
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
                                 Categorias
                             </a>
+                            <a class="nav-link" href="<?php echo base_url; ?>Productos">
+                                <div class="sb-nav-link-icon"><i class="fab fa-product-hunt"></i></div>
+                                Productos
+                            </a>
                             <!-- -->
                           
                         </div>

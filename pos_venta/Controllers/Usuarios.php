@@ -6,15 +6,16 @@ class Usuarios extends Controller
 	{
 		//iniciamos seccion
         session_start();
-		if (empty($_SESSION['activo'])) {
-            header("location: ".base_url);
-        }
+		
         //cargamos el constructor de la instancia
         parent::__construct();
     }
 
 	public function index()
 	{
+		if (empty($_SESSION['activo'])) {
+            header("location: ".base_url);
+        }
 
 		//accedemos a la accion getUsuario
 		//print_r($this->model->getUsuario());

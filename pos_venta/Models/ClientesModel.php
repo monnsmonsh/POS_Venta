@@ -10,7 +10,7 @@ class ClientesModel extends Query{
 		parent::__construct();
 	}
 
-	//para optener la lista de clientes
+	//para optener la lista de CLIENTES en el controlador
 	public function getClientes()
 	{
 		//$sql = "SELECT * FROM clientes";

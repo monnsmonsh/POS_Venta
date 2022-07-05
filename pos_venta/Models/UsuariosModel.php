@@ -16,7 +16,7 @@ class UsuariosModel extends Query{
 		return $data;
 	}
 
-	//para optener la lista de usuarios
+	//para optener la lista de producton en el controlador
 	public function getUsuarios()
 	{
 		//$sql = "SELECT * FROM usuarios";

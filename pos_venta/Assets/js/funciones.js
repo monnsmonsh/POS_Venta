@@ -26,45 +26,6 @@ document.addEventListener("DOMContentLoaded", function(){
 	});//Fin de la tabla Usuarios
 })
 
-function frmLogin(e){
-	e.preventDefault();
-	const usuario = document.getElementById("usuario");
-	const clave = document.getElementById("clave");
-
-	if(usuario.value == ""){
-		clave.classList.remove("is-invalid");
-		usuario.classList.add("is-invalid");
-		usuario.focus();
-	}
-	else if(clave.value == ""){
-		usuario.classList.remove("is-invalid");
-		clave.classList.add("is-invalid");
-		clave.focus();
-	}
-	else{
-		const url = base_url + "Usuarios/validar";
-		const frm = document.getElementById("frmLogin");
-		const http = new XMLHttpRequest();
-		http.open("POST", url, true);
-		http.send(new FormData(frm));
-		http.onreadystatechange = function(){
-			if (this.readyState == 4 && this.status == 200){
-				//parseamos nuestro mensaje
-				const res = JSON.parse(this.responseText);
-				if(res == "ok"){
-					window.location = base_url + "Usuarios";
-				}else{
-					//mensaje de erro de usuario y/o clave
-					document.getElementById("alerta").classList.remove("d-none");
-					document.getElementById("alerta").innerHTML = res;
-				}
-
-				//console.log(this.responseText);
-			} 
-		}
-
-	}
-}
 
 //crear usuario
 function frmUsuario(){
@@ -1183,3 +1144,237 @@ function btnReingresarCat(id){
 //
 //
 //Fin CATEGORIAS
+
+
+
+//
+//Inicio de PRODUCTOS
+//
+//recibimos la lista de medidas
+let tblProductos;
+document.addEventListener("DOMContentLoaded", function(){
+	tblProductos = $('#tblProductos').DataTable({
+        ajax: {
+            url: base_url + "Productos/listar",
+            dataSrc: ''
+        },
+        columns: [
+        	{'data' : 'id'},
+        	{'data' : 'codigo'},
+        	{'data' : 'descripcion'},
+        	{'data' : 'precio_venta'},
+        	{'data' : 'cantidad'},
+           	//generamos un obj para estado
+            {'data' : 'estado'},
+           	//generamos un obj para las acciones
+            {'data' : 'acciones'},
+	    ],
+	    language: {
+            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
+        },
+	});
+})
+
+//crear caja
+function frmProducto(){
+	//accedemos al titulo de la ventana modal para cambiar el  titulo y el btn
+	document.getElementById("title").innerHTML = "Nueva Producto";
+	document.getElementById("btnAccion").innerHTML = "Registrar";
+	//reseteamos el frm
+	document.getElementById("frmProducto").reset();
+	$("#nuevo_producto").modal("show");
+	document.getElementById("id").value ="";
+}
+
+//registrar producto
+function registarPro(e){
+	e.preventDefault();
+	const codigo = document.getElementById("codigo");
+	const descripcion = document.getElementById("descripcion");
+	const precio_compra = document.getElementById("precio_compra");
+	const precio_venta = document.getElementById("precio_venta");
+	const id_medida = document.getElementById("medida");
+	const id_categoria = document.getElementById("categoria");
+
+	//realizamos validacions y verificamos:
+	if(codigo.value == "" || descripcion.value == "" || precio_compra.value == "" || precio_venta.value == "" ){
+		//mostramos alerta con sweetalert2
+		Swal.fire({
+		  	position: 'top-center',
+		  	icon: 'error',
+		  	title: 'Todos los campos son obligatorios',
+		  	showConfirmButton: false,
+		  	timer: 2000
+		})	
+	}else{
+		const url = base_url + "Productos/registrar";
+		const frm = document.getElementById("frmProducto");
+		const http = new XMLHttpRequest();
+		http.open("POST", url, true);
+		http.send(new FormData(frm));
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				const res= JSON.parse(this.responseText);
+				if (res =="si"){
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'success',
+					  	title: 'Producto registrado con exito',
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+					//reseteamos frm
+					frm.reset();
+					//oculdamo el modal
+					$('#nuevo_producto').modal("hide");
+					//recargamos la tbl
+					tblProductos.ajax.reload();
+				}
+				//si el medida es modificado
+				else if(res == "modificado"){
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'success',
+					  	title: 'Producto modificado con exito',
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+					$('#nuevo_producto').modal("hide")
+					tblProductos.ajax.reload();
+				}else{
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'error',
+					  	title: res,
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+				}
+			} 
+		}
+	}
+}
+
+//editar Producto
+function btnEditarPro(id){
+	//accedemos al titulo de la ventana modal para cambiar el tituloy el btn
+	document.getElementById("title").innerHTML ="Actualizar Producto"
+	document.getElementById("btnAccion").innerHTML ="Modifcar"
+
+	//obtenemos los datos para editar
+	const url = base_url + "Productos/editar/"+id;
+	const http = new XMLHttpRequest();
+	http.open("GET", url, true);
+	http.send();
+	http.onreadystatechange = function(){
+		if (this.readyState == 4 && this.status == 200){
+			//console.log(this.responseText); 
+			const res = JSON.parse(this.responseText);
+			document.getElementById("id").value = res.id;
+			//accedemos a los datos a editar
+			document.getElementById("codigo").value = res.codigo;
+			document.getElementById("descripcion").value = res.descripcion;
+			document.getElementById("precio_compra").value = res.precio_compra;
+			document.getElementById("precio_venta").value = res.precio_venta;
+			document.getElementById("media").value = res.id_medida;
+			document.getElementById("categoria").value = res.id_categoria;
+			$("#nuevo_producto").modal("show");
+		} 
+	}	
+}
+//eliminar Producto
+function btnEliminarPro(id){
+	//alert(id);
+	Swal.fire({
+	  	title: '¿Estas seguro de eliminar?',
+	  	text: "La Categoria no se eliminara de forma permanete, solo cambiara el estado a inactivo",
+	  	icon: 'warning',
+	  	showCancelButton: true,
+	  	confirmButtonColor: '#3085d6',
+	  	cancelButtonColor: '#d33',
+	  	confirmButtonText: 'SI',
+	  	cancelButtonText: 'NO'
+	}).then((result) => {
+	  if (result.isConfirmed) {
+	  	//enviamos el id
+
+		//obtenemos los datos para editar
+		const url = base_url + "Productos/eliminar/"+id;
+		const http = new XMLHttpRequest();
+		http.open("GET", url, true);
+		http.send();
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				const res = JSON.parse(this.responseText);
+				if (res == "ok") {
+					Swal.fire(
+				      'Mensaje!',
+				      'Producto eliminado con exito.',
+				      'success'
+				    )
+					tblProductos.ajax.reload();
+				}else{
+					Swal.fire(
+				      'Mensaje!',
+				      res,
+				      'error'
+				    )
+				}
+			} 
+		}
+
+	    
+	  }
+	})
+}
+
+//Reingresar categoria
+function btnReingresarPro(id){
+	//alert(id);
+	Swal.fire({
+	  	title: '¿Estas seguro de reingresar?',
+	  	icon: 'warning',
+	  	showCancelButton: true,
+	  	confirmButtonColor: '#3085d6',
+	  	cancelButtonColor: '#d33',
+	  	confirmButtonText: 'SI',
+	  	cancelButtonText: 'NO'
+	}).then((result) => {
+	  if (result.isConfirmed) {
+	  	//enviamos el id
+
+		//obtenemos los datos para editar
+		const url = base_url + "Productos/reingresar/"+id;
+		const http = new XMLHttpRequest();
+		http.open("GET", url, true);
+		http.send();
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				const res = JSON.parse(this.responseText);
+				if (res == "ok") {
+					Swal.fire(
+				      'Mensaje!',
+				      'Producto reigresado con exito.',
+				      'success'
+				    )
+					tblProductos.ajax.reload();
+				}else{
+					Swal.fire(
+				      'Mensaje!',
+				      res,
+				      'error'
+				    )
+				}
+			} 
+		}
+
+	    
+	  }
+	})
+}
+//
+//
+//Fin PRODUCTOS

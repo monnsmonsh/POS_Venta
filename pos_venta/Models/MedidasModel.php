@@ -10,7 +10,7 @@ class MedidasModel extends Query{
 		parent::__construct();
 	}
 
-	//para optener la lista de MEdidas
+	//para optener la lista de MEDIDAS en el controlador
 	public function getMedidas()
 	{
 		//$sql = "SELECT * FROM medidas";

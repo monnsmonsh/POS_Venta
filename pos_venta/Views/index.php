@@ -77,6 +77,6 @@
         </script>
         
 
-        <script src="<?php echo base_url; ?>Assets/js/funciones.js"></script>
+        <script src="<?php echo base_url; ?>Assets/js/login.js"></script>
     </body>
 </html>

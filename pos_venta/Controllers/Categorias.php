@@ -6,15 +6,16 @@ class Categorias extends Controller
 	{
 		//iniciamos seccion
         session_start();
-		if (empty($_SESSION['activo'])) {
-            header("location: ".base_url);
-        }
+		
         //cargamos el constructor de la instancia
         parent::__construct();
     }
 
 	public function index()
 	{
+		if (empty($_SESSION['activo'])) {
+            header("location: ".base_url);
+        }
 		//mostramos la VISTA
 		$this->views->getView($this, "index");
 	}
@@ -66,7 +67,7 @@ class Categorias extends Controller
 				}else if($data == "exite"){
 					$msg = "¡¡Error!! La categoria ya existe";
 				}else{
-					$msg ="Error al aregistrar la categoria";
+					$msg ="Error al registrar la categoria";
 				}
 
 			}else{
