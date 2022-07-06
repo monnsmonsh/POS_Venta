@@ -1294,7 +1294,6 @@ function btnEditarPro(id){
 			document.getElementById("icon-image").classList.add("d-none");
 			
 			document.getElementById("foto_actual").value = res.foto;
-			document.getElementById("foto_delete").value = res.foto;
 			
 			$("#nuevo_producto").modal("show");
 		} 
@@ -1419,8 +1418,61 @@ function deleteImg(){
 	document.getElementById("img-preview").src = '';
 	document.getElementById("imagen").value ='';
 
-	document.getElementById("foto_delete").value ='';
+	document.getElementById("foto_actual").value ='';
 }
 //
 //
 //Fin PRODUCTOS
+
+
+//
+//Inicio de COMPRAS
+//<--funciones para comprar
+function buscarCodigo(e){
+	e.preventDefault();
+	//para que solo busque si se da enter
+	if(e.which == 13){
+		const cod = document.getElementById("codigo").value;
+		//obtenemos los datos para de codigo productos
+		const url = base_url + "Compras/buscarCodigo/"+cod;
+		const http = new XMLHttpRequest();
+		http.open("GET", url, true);
+		http.send();
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				//pasamos la info en..
+				const res = JSON.parse(this.responseText);
+				//verificamos que exista el cod
+				if(res){
+					//mostramos inf en los inpt (nombre de imput) (nombre del arry)
+					document.getElementById("descripcion").value = res.descripcion;
+					document.getElementById("precio").value = res.precio_compra;
+					document.getElementById("id").value = res.id;
+
+					document.getElementById("cantidad").focus();
+				}else{
+					//alert("Producto no existente")
+					Swal.fire({
+					  	position: 'top-center',
+					  	icon: 'error',
+					  	title: 'Producto no existente',
+					  	showConfirmButton: false,
+					  	timer: 2000
+					})
+					document.getElementById("codigo").value = '';
+					document.getElementById("codigo").focus();
+				}
+
+			} 
+		}
+	}
+}
+
+function calcularPrecio(e){
+	e.preventDefault();
+	const cant = document.getElementById("cantidad").value;
+	const precio = document.getElementById("precio").value;
+
+	document.getElementById("sub_total").value = precio * cant;
+}

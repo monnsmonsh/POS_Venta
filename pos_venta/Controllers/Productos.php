@@ -35,7 +35,7 @@ class Productos extends Controller
 		for($i=0; $i< count($data); $i++){
 
 			//par lista img
-			$data[$i]['imagen'] ='<img class="img-thumbnail" style="width:150px;" src="'. base_url. "Assets/img/productos/". $data[$i]['foto'].'">';
+			$data[$i]['imagen'] ='<img class="img-thumbnail" style="width:100px;" src="'. base_url. "Assets/img/productos/". $data[$i]['foto'].'">';
 
 			//valdiacion de estado de usuario
 			if ($data[$i]['estado'] == 1) {
@@ -66,62 +66,68 @@ class Productos extends Controller
 		$precio_venta = $_POST['precio_venta'];
 		$medida =$_POST['medida'];
 		$categoria =$_POST['categoria'];
+		$id =$_POST['id'];
 		
 		// var para img
 		$img= $_FILES['imagen'];
 			$name = $img['name'];
 			$tmpname = $img['tmp_name'];
-			$destino = "Assets/img/productos/".$name;
 		//verificamos que tenemos algo por el metodo fiel
-		if(empty($name)){
-			$name = "default.jpg";
-		}
-		$id =$_POST['id'];
+		$fecha = date("YmdHis");
 
 		if(empty ($codigo) || empty ($descripcion) || empty ($precio_compra) || empty ($precio_venta) || empty ($medida) || empty ($categoria)){
 			//
 			$msg = "todos los campos son obligatorio";
 
 		}else{
+			//vrificamos si exite img
+			if(!empty($name)){
+				$imgNombre = $fecha . ".jpg";
+				$destino = "Assets/img/productos/".$imgNombre;
+			}else if(!empty($_POST['foto_actual']) && empty($name)){
+				$imgNombre = $_POST['foto_actual'];
+			}else{
+				$imgNombre ="default.jpg";
+			}
 			//si es un nuevo registro lo registramos
 			if($id == ""){
 				// con parametro 6
-				$data = $this->model->registrarProducto($codigo, $descripcion, $precio_compra, $precio_venta, $medida, $categoria, $name);
+				$data = $this->model->registrarProducto($codigo, $descripcion, $precio_compra, $precio_venta, $medida, $categoria, $imgNombre);
 				//verificamos la respusta caja
 				if($data == "ok"){
+					if (!empty($name)) {
+						//movemos la img a la carpeta def
+						move_uploaded_file($tmpname, $destino);
+					}
 					//$msg = "usuario registrar con exito";
 					//cambiamos msg para realziar una validacion
 					$msg = "si";
-					//movemos la img a la carpeta def
-					move_uploaded_file($tmpname, $destino);
+					
 				}else if($data == "exite"){
 					$msg = "¡¡Error!! El usuario ya existe";
 				}else{
 					$msg ="error al aregistrar el usuario";
 				}
 			}else{
-				//verificamos si img se mod
-				if($_POST['foto_actual'] != $_POST['foto_delete']){
-					//eliminar img remplasasa
-					$imgDelete = $data = $this->model->editarProducto($id);
-					if ($imgDelete['foto'] !='default.jpg' || $imgDelete['foto'] != ""){
-						if(file_exists($destino . $imgDelete['foto'])){
-							unlink($destino . $imgDelete['foto']);
-						}
+				//eliminar img remplasasa
+				$imgDelete = $data = $this->model->editarProducto($id);
+				if ($imgDelete['foto'] !='default.jpg' || $imgDelete['foto'] != ""){
+					if(file_exists("Assets/img/productos/" . $imgDelete['foto'])){
+						unlink("Assets/img/productos/" . $imgDelete['foto']);
 					}
-					$data = $this->model->modificarProducto($codigo, $descripcion, $precio_compra, $precio_venta, $medida, $categoria, $name, $id);
-					//verificamos la respusta caja
-					if($data == "modificado"){
-						//$msg = "producto modificado con exito";
-						//cambiamos msg para realziar una validacion
-						$msg = "modificado";
+				}
+				$data = $this->model->modificarProducto($codigo, $descripcion, $precio_compra, $precio_venta, $medida, $categoria, $imgNombre, $id);
+				//verificamos la respusta caja
+				if($data == "modificado"){
+					if (!empty($name)) {
 						//movemos la img a la carpeta def
 						move_uploaded_file($tmpname, $destino);
-					}else{
-						$msg ="Error al modificar el producto";
 					}
-
-
+					//$msg = "producto modificado con exito";
+					//cambiamos msg para realziar una validacion
+					$msg = "modificado";
+				}else{
+					$msg ="Error al modificar el producto";
 				}
 				
 			}

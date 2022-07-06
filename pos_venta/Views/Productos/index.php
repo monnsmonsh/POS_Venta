@@ -103,7 +103,7 @@
 
 		                  			<span id="icon-cerrar"></span>
 									<input type="hidden" id="foto_actual" name="foto_actual">
-		                  			<input type="hidden" id="foto_delete" name="foto_delete">
+		                  			
 		                  			<input id="imagen" class="d-none" type="file" name="imagen" onchange="preview(event)">
 
 		                  			
