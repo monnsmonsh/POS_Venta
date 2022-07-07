@@ -17,12 +17,12 @@
 				    Producto
 				</div>
 				  <div class="card-body">
-				    <form>
+				    <form id="frmCompra">
 		        		<div class="row">
 		        			<div class="col-md-3">
 					            <div class="mb-3">
 					            	<input type="hidden" id="id" name="id">
-		                        	<label for="codigo" class="form-label">Codigo de barras</label>
+		                        	<label for="codigo" class="form-label"><i class="fas fa-barcode"></i>Codigo de barras</label>
 		                        	<input id="codigo" class="form-control" type="text" name="codigo"  placeholder="codigo de barras" onkeyup="buscarCodigo(event)">
 		                    	</div> 
 					        </div>
@@ -61,16 +61,16 @@
 	        			<div class="col-md-12">
 	        				<label class="form-label">Lista de Compra</label>
 
-	        				<table class="table table-hover" style="width:100%" id="">
+	        				<table class="table table-bordered table-hover" style="width:100%" id="">
 								<thead class="table-dark">
 							    	<th>Id</th>
-							    	<th>Usuario</th>
-							    	<th>Nombre</th>
-							    	<th>Caja</th>
-							    	<th>Estado</th>
+							    	<th>Descripcion</th>
+							    	<th>Cant</th>
+							    	<th>Precio</th>
+							    	<th>Sub Total</th>
 							    	<th></th>
 								</thead>
-								<tbody>
+								<tbody id="tblDetalleCompras">
 								    
 								</tbody>
 							</table>

@@ -1475,4 +1475,63 @@ function calcularPrecio(e){
 	const precio = document.getElementById("precio").value;
 
 	document.getElementById("sub_total").value = precio * cant;
+	
+	//para agregar con enter
+	if(e.which == 13){
+		//validamos si tenemos un valor en cat
+		if(cant > 0){
+			//alert("si");
+			//obtenemos los datos para de codigo productos
+			const url = base_url + "Compras/ingresar";
+			const frm = document.getElementById("frmCompra");
+			const http = new XMLHttpRequest();
+			http.open("POST", url, true);
+			http.send(new FormData(frm));
+			http.onreadystatechange = function(){
+				if (this.readyState == 4 && this.status == 200){
+					//console.log(this.responseText);
+
+					//pasamos la info en..
+					const res = JSON.parse(this.responseText);
+					if(res == 'ok'){
+						//alert("Ingresado");
+						frm.reset();
+						cargarDetalle();
+					}
+
+				} 
+			}
+		}
+	}
+
+}
+cargarDetalle();
+//agregamos a lista de compras
+function cargarDetalle(){
+	//obtenemos los datos para de codigo productos
+	const url = base_url + "Compras/listar";
+	const http = new XMLHttpRequest();
+	http.open("GET", url, true);
+	http.send();
+	http.onreadystatechange = function(){
+		if (this.readyState == 4 && this.status == 200){
+			//console.log(this.responseText);
+			const res = JSON.parse(this.responseText);
+			let html = '';
+			res.forEach(row =>{
+				html += `<tr>
+					<td>${row['id']}</td>
+					<td>${row['descripcion']}</td>
+					<td>${row['cantidad']}</td>
+					<td>${row['precio']}</td>
+					<td>${row['sub_total']}</td>
+					<td></td>
+
+				</tr>`;
+			});
+			document.getElementById("tblDetalleCompras").innerHTML = html;
+			
+
+		} 
+	}
 }
