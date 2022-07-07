@@ -1518,19 +1518,60 @@ function cargarDetalle(){
 			//console.log(this.responseText);
 			const res = JSON.parse(this.responseText);
 			let html = '';
-			res.forEach(row =>{
+			res.detalle_compra.forEach(row =>{
 				html += `<tr>
 					<td>${row['id']}</td>
 					<td>${row['descripcion']}</td>
 					<td>${row['cantidad']}</td>
 					<td>${row['precio']}</td>
 					<td>${row['sub_total']}</td>
-					<td></td>
+					<td>
+						<button class="btn btn-danger" type="button" onclick="deleteDetalle(${row['id']})">
+							<i class="fas fa-trash-alt"></i>
+						</button>
+					</td>
 
 				</tr>`;
 			});
 			document.getElementById("tblDetalleCompras").innerHTML = html;
-			
+			document.getElementById("total").value = res.total_pagar.total;
+
+		} 
+	}
+}
+
+function deleteDetalle(id){
+ 	//alert(id);
+ 	//obtenemos los datos para de codigo productos
+	const url = base_url + "Compras/delete/"+id;
+	const http = new XMLHttpRequest();
+	http.open("GET", url, true);
+	http.send();
+	http.onreadystatechange = function(){
+		if (this.readyState == 4 && this.status == 200){
+			//console.log(this.responseText);
+			const res = JSON.parse(this.responseText);
+			if(res == 'ok'){
+				//alert("Producto no existente")
+				Swal.fire({
+				  	position: 'top-center',
+				  	icon: 'success',
+				  	title: 'Producto Eliminado',
+				  	showConfirmButton: false,
+				  	timer: 2000
+				})
+				//llamamos a la funcion cargarDetalle para actualiza la tabla detalleCompras
+				cargarDetalle();
+			}else{
+				//alert("Producto no existente")
+				Swal.fire({
+				  	position: 'top-center',
+				  	icon: 'error',
+				  	title: 'Error al eliminar el Producto',
+				  	showConfirmButton: false,
+				  	timer: 2000
+				})
+			}
 
 		} 
 	}

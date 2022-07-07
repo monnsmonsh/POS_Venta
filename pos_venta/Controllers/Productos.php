@@ -111,7 +111,7 @@ class Productos extends Controller
 			}else{
 				//eliminar img remplasasa
 				$imgDelete = $data = $this->model->editarProducto($id);
-				if ($imgDelete['foto'] !='default.jpg' || $imgDelete['foto'] != ""){
+				if ($imgDelete['foto'] !='default.jpg'){
 					if(file_exists("Assets/img/productos/" . $imgDelete['foto'])){
 						unlink("Assets/img/productos/" . $imgDelete['foto']);
 					}
