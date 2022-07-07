@@ -1494,7 +1494,11 @@ function calcularPrecio(e){
 					//pasamos la info en..
 					const res = JSON.parse(this.responseText);
 					if(res == 'ok'){
-						//alert("Ingresado");
+						alert("Ingresado");
+						frm.reset();
+						cargarDetalle();
+					}else if(res == 'modificado'){
+						alert("Producto Actualizado");
 						frm.reset();
 						cargarDetalle();
 					}
@@ -1575,4 +1579,46 @@ function deleteDetalle(id){
 
 		} 
 	}
+}
+function generarCompra(){
+	//alert(id);
+	Swal.fire({
+	  	title: '¿Estas seguro de realizar la compra?',
+	  	icon: 'warning',
+	  	showCancelButton: true,
+	  	confirmButtonColor: '#3085d6',
+	  	cancelButtonColor: '#d33',
+	  	confirmButtonText: 'SI',
+	  	cancelButtonText: 'NO'
+	}).then((result) => {
+	  if (result.isConfirmed) {
+	  	//enviamos el id
+		//obtenemos los datos registrar compra
+		const url = base_url + "Compras/registrarCompra";
+		const http = new XMLHttpRequest();
+		http.open("GET", url, true);
+		http.send();
+		http.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200){
+				//console.log(this.responseText);
+				const res = JSON.parse(this.responseText);
+				if (res == "ok") {
+					Swal.fire(
+				      'Mensaje!',
+				      'Compra registrada con exito.',
+				      'success'
+				    )
+				}else{
+					Swal.fire(
+				      'Mensaje!',
+				      res,
+				      'error'
+				    )
+				}
+			} 
+		}
+
+	    
+	  }
+	})
 }

@@ -85,7 +85,7 @@
 		                        <label for="total" class="fw-bold">Total</label>
 		                        <input id="total" class="form-control " type="number" name="total"  placeholder="total" disabled>
 		                        <div class="d-grid gap-2">
-  									<button class="btn btn-primary mt-2" type="button">Generar Compra</button>
+  									<button class="btn btn-primary mt-2" type="button" onclick="generarCompra()">Generar Compra</button>
 								</div>
 		                    </div>
 					  	</div>
