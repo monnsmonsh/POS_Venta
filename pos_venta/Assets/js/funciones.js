@@ -1,7 +1,9 @@
 
-//recibimos la lista de usuarios
-let tblUsuarios;
+//recibimos la listas
+let tblUsuarios, tblClientes, tblMedidas, tblCajas, tblCategorias, tblProductos, t_historial_c;
 document.addEventListener("DOMContentLoaded", function(){
+	//
+	//Inicio de la tabla Usuarios
 	tblUsuarios = $('#tblUsuarios').DataTable({
         ajax: {
             url: base_url + "Usuarios/listar",
@@ -24,6 +26,134 @@ document.addEventListener("DOMContentLoaded", function(){
             "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
         },
 	});//Fin de la tabla Usuarios
+
+	//
+	//Inicio de la tabla Clientes
+	tblClientes = $('#tblClientes').DataTable({
+        ajax: {
+            url: base_url + "Clientes/listar",
+            dataSrc: ''
+        },
+        columns: [
+        	{'data' : 'id'},
+        	{'data' : 'dni'},
+        	{'data' : 'nombre'},
+            {'data' : 'telefono'},
+           	{'data' : 'direccion'},
+           	//generamos un obj para estado
+            {'data' : 'estado'},
+           	//generamos un obj para las acciones
+            {'data' : 'acciones'},
+	    ],
+	    language: {
+            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
+        },
+	});//Fin de la tabla Clientes
+
+	//
+	//Inicio de la tabla Medidas
+	tblMedidas = $('#tblMedidas').DataTable({
+        ajax: {
+            url: base_url + "Medidas/listar",
+            dataSrc: ''
+        },
+        columns: [
+        	{'data' : 'id'},
+        	{'data' : 'nombre'},
+            {'data' : 'nombre_corto'},
+           	//generamos un obj para estado
+            {'data' : 'estado'},
+           	//generamos un obj para las acciones
+            {'data' : 'acciones'},
+	    ],
+	    language: {
+            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
+        },
+	});//Fin de la tabla Medidas
+
+	//
+	//Inicio de la tabla Cajas
+	tblCajas = $('#tblCajas').DataTable({
+        ajax: {
+            url: base_url + "Cajas/listar",
+            dataSrc: ''
+        },
+        columns: [
+        	{'data' : 'id'},
+        	{'data' : 'caja'},
+           	//generamos un obj para estado
+            {'data' : 'estado'},
+           	//generamos un obj para las acciones
+            {'data' : 'acciones'},
+	    ],
+	    language: {
+            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
+        },
+	});//Fin de la tabla Cajas
+
+	//
+	//Inicio de la tabla Categorias
+	tblCategorias = $('#tblCategorias').DataTable({
+        ajax: {
+            url: base_url + "Categorias/listar",
+            dataSrc: ''
+        },
+        columns: [
+        	{'data' : 'id'},
+        	{'data' : 'nombre'},
+           	//generamos un obj para estado
+            {'data' : 'estado'},
+           	//generamos un obj para las acciones
+            {'data' : 'acciones'},
+	    ],
+	    language: {
+            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
+        },
+	});//Fin de la tabla tblCategorias
+
+	//
+	//Inicio de la tabla Productos
+	tblProductos = $('#tblProductos').DataTable({
+        ajax: {
+            url: base_url + "Productos/listar",
+            dataSrc: ''
+        },
+        columns: [
+        	{'data' : 'id'},
+        	{'data' : 'imagen'},
+        	{'data' : 'codigo'},
+        	{'data' : 'descripcion'},
+        	{'data' : 'precio_venta'},
+        	{'data' : 'cantidad'},
+           	//generamos un obj para estado
+            {'data' : 'estado'},
+           	//generamos un obj para las acciones
+            {'data' : 'acciones'},
+	    ],
+	    language: {
+            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
+        },
+	});//Fin de la tabla Productos
+
+	//
+	//Inicio de la tabla Historial de compras
+	t_historial_c = $('#t_historial_c').DataTable({
+        ajax: {
+            url: base_url + "Compras/listar_historial",
+            dataSrc: ''
+        },
+        columns: [
+        	{'data' : 'id'},
+        	{'data' : 'total'},
+            {'data' : 'fecha'},
+           	//generamos un obj para las acciones
+            {'data' : 'acciones'},
+	    ],
+	    language: {
+            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
+        },
+	});//Fin de la tabla Historial de compras
+
 })
 
 
@@ -241,30 +371,7 @@ function btnReingresarUser(id){
 //
 //Inicio de Cliente cleintes
 //
-//recibimos la lista de clientes
-let tblClientes;
-document.addEventListener("DOMContentLoaded", function(){
-	tblClientes = $('#tblClientes').DataTable({
-        ajax: {
-            url: base_url + "Clientes/listar",
-            dataSrc: ''
-        },
-        columns: [
-        	{'data' : 'id'},
-        	{'data' : 'dni'},
-        	{'data' : 'nombre'},
-            {'data' : 'telefono'},
-           	{'data' : 'direccion'},
-           	//generamos un obj para estado
-            {'data' : 'estado'},
-           	//generamos un obj para las acciones
-            {'data' : 'acciones'},
-	    ],
-	    language: {
-            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
-        },
-	});
-})
+
 //crear cliente
 function frmCliente(){
 	//accedemos al titulo de la ventana modal para cambiar el  titulo y el btn
@@ -473,28 +580,6 @@ function btnReingresarCli(id){
 //
 //Inicio de Medidas
 //
-//recibimos la lista de medidas
-let tblMedidas;
-document.addEventListener("DOMContentLoaded", function(){
-	tblMedidas = $('#tblMedidas').DataTable({
-        ajax: {
-            url: base_url + "Medidas/listar",
-            dataSrc: ''
-        },
-        columns: [
-        	{'data' : 'id'},
-        	{'data' : 'nombre'},
-            {'data' : 'nombre_corto'},
-           	//generamos un obj para estado
-            {'data' : 'estado'},
-           	//generamos un obj para las acciones
-            {'data' : 'acciones'},
-	    ],
-	    language: {
-            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
-        },
-	});
-})
 
 //crear medida
 function frmMedida(){
@@ -703,28 +788,6 @@ function btnReingresarMed(id){
 //
 //Inicio de Cajas
 //
-//recibimos la lista de medidas
-
-let tblCajas;
-document.addEventListener("DOMContentLoaded", function(){
-	tblCajas = $('#tblCajas').DataTable({
-        ajax: {
-            url: base_url + "Cajas/listar",
-            dataSrc: ''
-        },
-        columns: [
-        	{'data' : 'id'},
-        	{'data' : 'caja'},
-           	//generamos un obj para estado
-            {'data' : 'estado'},
-           	//generamos un obj para las acciones
-            {'data' : 'acciones'},
-	    ],
-	    language: {
-            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
-        },
-	});
-})
 
 //crear caja
 function frmCaja(){
@@ -929,27 +992,6 @@ function btnReingresarCaj(id){
 //
 //Inicio de CATEGORIAS
 //
-//recibimos la lista de medidas
-let tblCategorias;
-document.addEventListener("DOMContentLoaded", function(){
-	tblCategorias = $('#tblCategorias').DataTable({
-        ajax: {
-            url: base_url + "Categorias/listar",
-            dataSrc: ''
-        },
-        columns: [
-        	{'data' : 'id'},
-        	{'data' : 'nombre'},
-           	//generamos un obj para estado
-            {'data' : 'estado'},
-           	//generamos un obj para las acciones
-            {'data' : 'acciones'},
-	    ],
-	    language: {
-            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
-        },
-	});
-})
 
 //crear caja
 function frmCategoria(){
@@ -1150,31 +1192,6 @@ function btnReingresarCat(id){
 //
 //Inicio de PRODUCTOS
 //
-//recibimos la lista de medidas
-let tblProductos;
-document.addEventListener("DOMContentLoaded", function(){
-	tblProductos = $('#tblProductos').DataTable({
-        ajax: {
-            url: base_url + "Productos/listar",
-            dataSrc: ''
-        },
-        columns: [
-        	{'data' : 'id'},
-        	{'data' : 'imagen'},
-        	{'data' : 'codigo'},
-        	{'data' : 'descripcion'},
-        	{'data' : 'precio_venta'},
-        	{'data' : 'cantidad'},
-           	//generamos un obj para estado
-            {'data' : 'estado'},
-           	//generamos un obj para las acciones
-            {'data' : 'acciones'},
-	    ],
-	    language: {
-            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
-        },
-	});
-})
 
 //crear caja
 function frmProducto(){
@@ -1494,11 +1511,25 @@ function calcularPrecio(e){
 					//pasamos la info en..
 					const res = JSON.parse(this.responseText);
 					if(res == 'ok'){
-						alert("Ingresado");
+						//alert("Ingresado");
+						Swal.fire({
+						  	position: 'top-center',
+						  	icon: 'success',
+						  	title: 'Producto Ingresado',
+						  	showConfirmButton: false,
+						  	timer: 2000
+						})
 						frm.reset();
 						cargarDetalle();
 					}else if(res == 'modificado'){
-						alert("Producto Actualizado");
+						//alert("Producto Actualizado");
+						Swal.fire({
+						  	position: 'top-center',
+						  	icon: 'success',
+						  	title: 'Cantidad actualizada de producto',
+						  	showConfirmButton: false,
+						  	timer: 2000
+						})
 						frm.reset();
 						cargarDetalle();
 					}
@@ -1602,12 +1633,18 @@ function generarCompra(){
 			if (this.readyState == 4 && this.status == 200){
 				//console.log(this.responseText);
 				const res = JSON.parse(this.responseText);
-				if (res == "ok") {
+				if (res.msg == "ok") {
 					Swal.fire(
 				      'Mensaje!',
 				      'Compra registrada con exito.',
 				      'success'
 				    )
+				    //para abror el reporte
+				    const ruta = base_url +'Compras/generarPdf/'+res.id_compra;
+				    window.open(ruta)
+				    setTimeout(() =>{
+				    	window.location.reload();
+				    }, 200)
 				}else{
 					Swal.fire(
 				      'Mensaje!',

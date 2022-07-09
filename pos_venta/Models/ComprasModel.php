@@ -124,6 +124,42 @@ class ComprasModel extends Query{
 		}
 		return $res;
 	}
+
+	public function getEmpresa()
+	{
+		$sql = "SELECT * FROM configuracion";
+		$data = $this->select($sql);
+		return $data;
+		
+	}
+
+	public function vaciarDetalle(int $id_usuario)
+	{
+		$sql = "DELETE FROM detallecompras WHERE id_usuario = ?";
+		$datos = array($id_usuario);
+		$data =$this->save($sql, $datos);
+		if($data == 1){
+			$res = "ok";
+		}else {
+			$res = "error";
+		}
+		return $res;
+
+	}
+
+	public function getProCompra(int $id_compra)
+	{
+		$sql = "SELECT c.*, d.*, p.id, p.descripcion FROM compras c INNER JOIN detalle_compras d ON c.id = d.id_compra INNER JOIN productos p ON p.id = d.id_producto WHERE c.id = $id_compra";
+		$data = $this->selectAll($sql);
+		return $data;
+	}
+
+	public function getHistorialcompras()
+	{
+		$sql = "SELECT * FROM compras";
+		$data = $this->selectAll($sql);
+		return $data;
+	}
 }
 
 
