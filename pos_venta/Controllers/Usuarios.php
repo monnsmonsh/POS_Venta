@@ -6,6 +6,11 @@ class Usuarios extends Controller
 	{
 		//iniciamos seccion
         session_start();
+        /**
+		if (empty($_SESSION['activo'])) {
+            header("location: ".base_url);
+        }
+       */
 		
         //cargamos el constructor de la instancia
         parent::__construct();
@@ -13,10 +18,11 @@ class Usuarios extends Controller
 
 	public function index()
 	{
+		
 		if (empty($_SESSION['activo'])) {
             header("location: ".base_url);
         }
-
+       
 		//accedemos a la accion getUsuario
 		//print_r($this->model->getUsuario());
 
@@ -66,6 +72,7 @@ class Usuarios extends Controller
             $clave = $_POST['clave'];
             $hash = hash("SHA256", $clave);
             $data = $this->model->getUsuario($usuario, $hash);
+
 
 			//Si exite algo en var $data inciamos seccion
 			if ($data) {

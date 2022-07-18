@@ -187,9 +187,9 @@ class Compras extends Controller{
 
 		$pdf->Ln();
 		$pdf->SetFont('Arial','B',7);
-		$pdf->Cell(60, 5,'Total a pagar',0, 0, 'R' );
+		$pdf->Cell(59, 5,'Total a pagar',0, 0, 'R' );
 		$pdf->SetFont('Arial','',7);
-		$pdf->Cell(12, 5, number_format($total, 2, '.',','),0, 1, 'R' );
+		$pdf->Cell(11, 5, number_format($total, 2, '.',','),0, 1, 'R' );
 
 
 

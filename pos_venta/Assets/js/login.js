@@ -21,11 +21,15 @@ function frmLogin(e){
 		http.send(new FormData(frm));
 		http.onreadystatechange = function(){
 			if (this.readyState == 4 && this.status == 200){
-				console.log(this.responseText);
+				//console.log(this.responseText);
 				//parseamos nuestro mensaje
-				//const res = JSON.parse(this.responseText);
+				const res = JSON.parse(this.responseText);
 				if(res == "ok"){
 					window.location = base_url + "Usuarios";
+					/**
+					const ruta = base_url +'Usuarios;
+				    window.open(ruta)
+				    */
 				}else{
 					//mensaje de erro de usuario y/o clave
 					document.getElementById("alerta").classList.remove("d-none");

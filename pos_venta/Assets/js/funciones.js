@@ -1540,7 +1540,11 @@ function calcularPrecio(e){
 	}
 
 }
-cargarDetalle();
+//para ejecular la funcion cargarDetalle creamos una condicion
+if(document.getElementById('tblDetalleCompras')){
+	cargarDetalle();
+}
+
 //agregamos a lista de compras
 function cargarDetalle(){
 	//obtenemos los datos para de codigo productos
@@ -1573,7 +1577,7 @@ function cargarDetalle(){
 
 		} 
 	}
-}
+}// cargamos con if el tblDetalleCompras 
 
 function deleteDetalle(id){
  	//alert(id);
@@ -1659,3 +1663,28 @@ function generarCompra(){
 	  }
 	})
 }
+
+
+
+/**
+ *  Panel de Administracion/Configuracion
+ */
+function modificarEmpresa(){
+	const frm = document.getElementById('frmEmpresa');
+	const url = base_url + "Administracion/modificar";
+	const http = new XMLHttpRequest();
+	http.open("POST", url, true);
+	http.send(new FormData(frm));
+	http.onreadystatechange = function(){
+		if (this.readyState == 4 && this.status == 200){
+			console.log(this.responseText);
+			const res = JSON.parse(this.responseText);
+			
+			if(res == 'modificado'){
+				alert('datos modificado');
+			}
+
+		}
+	}
+}
+//Fin del Administracion/Configuracion
