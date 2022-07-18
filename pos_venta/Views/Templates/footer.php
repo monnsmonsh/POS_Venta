@@ -31,9 +31,12 @@
         <!-- Plantilla-->
 
 
-        <!-- Data B5-->
+        <!-- Data B5
         <script type="text/javascript" src="<?php echo base_url; ?>Assets/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url; ?>Assets/js/dataTables.bootstrap5.min.js"></script><script type="text/javascript"></script>
+        -->
+        <!-- Data Table B5-->
+        <script type="text/javascript" src="<?php echo base_url; ?>Assets/DataTables/datatables.min.js"></script>
 
         <script>
             const base_url="<?php echo base_url; ?>";

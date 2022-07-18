@@ -9,16 +9,19 @@
         <title>Panel de Administracion</title>
 
         <!-- SB Admin -->
-        <link href="<?php echo base_url; ?>Assets/css/style.css" rel="stylesheet" />
+
         <link href="<?php echo base_url; ?>Assets/css/styles.css" rel="stylesheet" />
         <script src="<?php echo base_url; ?>Assets/js/all.js" crossorigin="anonymous"></script>
         <!-- SB Admin -->
 
         
-        <!-- Data B5-->
+        <!-- Data B5
         <link rel="stylesheet" type="text/css" href="<?php echo base_url; ?>Assets/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href="<?php echo base_url; ?>Assets/css/dataTables.bootstrap5.min.css"/>
+        -->
         <!-- Data B5-->
+        <!-- Data Table B5-->
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url; ?>Assets/DataTables/datatables.min.css"/>
 
     </head>
 

@@ -12,21 +12,23 @@
             PRODUCTOS
         </div>
         <div class="card-body">
-        	<table class="table table-hover" style="width:100%" id="tblProductos">
-				<thead class="table-dark">
-			    	<th>Id</th>
-			    	<th>IMG</th>
-			    	<th>Codigo</th>
-			    	<th>Descripcion</th>
-			    	<th>Precio</th>
-			    	<th>Stock</th>
-			    	<th>Estado</th>
-			    	<th></th>
-				</thead>
-				<tbody>
-				    
-				</tbody>
-			</table>
+        	<div class="table-responsive">
+        		<table class="table table-hover" style="width:100%" id="tblProductos">
+					<thead class="table-dark">
+				    	<th>Id</th>
+				    	<th>IMG</th>
+				    	<th>Codigo</th>
+				    	<th>Descripcion</th>
+				    	<th>Precio</th>
+				    	<th>Stock</th>
+				    	<th>Estado</th>
+				    	<th></th>
+					</thead>
+					<tbody>
+					    
+					</tbody>
+				</table>
+        	</div>
         </div>
 	</div>
 

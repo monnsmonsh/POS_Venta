@@ -160,6 +160,16 @@ class ComprasModel extends Query{
 		$data = $this->selectAll($sql);
 		return $data;
 	}
+
+	public function actualizarStock(int $id_pro, int $cantidad)
+	{
+		$sql = "UPDATE productos SET cantidad = ? WHERE id=?";
+		$datos = array($cantidad, $id_pro);
+		$data =$this->save($sql, $datos);
+	
+		return $data;
+
+	}
 }
 
 
